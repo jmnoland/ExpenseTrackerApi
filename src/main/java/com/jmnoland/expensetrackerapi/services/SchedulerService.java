@@ -12,13 +12,6 @@ public class SchedulerService {
     @Scheduled(fixedRate = 2000)
     public void scheduleTask()
     {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "dd-MM-yyyy HH:mm:ss.SSS");
 
-        String strDate = dateFormat.format(new Date());
-
-        System.out.println(
-                "Cron job Scheduler: Job running at - "
-                        + strDate);
     }
 }

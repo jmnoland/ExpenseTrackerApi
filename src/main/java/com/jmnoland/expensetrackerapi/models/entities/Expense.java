@@ -3,26 +3,37 @@ package com.jmnoland.expensetrackerapi.models.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document("expenses")
 public class Expense {
 
     @Id
-    private String id;
+    private String expenseId;
     private String name;
-    private float amount;
-
-    public Expense(String id, String name, float amount) {
-        this.id = id;
+    private Float amount;
+    private String userId;
+    private String categoryId;
+    private String paymentTypeId;
+    private Date date;
+    private String recurringExpenseId;
+    public Expense(
+            String expenseId,
+            String userId,
+            String categoryId,
+            String paymentTypeId,
+            String name,
+            Date date,
+            Float amount,
+            String recurringExpenseId) {
+        this.expenseId = expenseId;
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.paymentTypeId = paymentTypeId;
         this.name = name;
+        this.date = date;
         this.amount = amount;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.recurringExpenseId = recurringExpenseId;
     }
 
     public String getName() {
@@ -33,11 +44,51 @@ public class Expense {
         this.name = name;
     }
 
-    public float getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getPaymentTypeId() {
+        return paymentTypeId;
+    }
+
+    public void setPaymentTypeId(String paymentTypeId) {
+        this.paymentTypeId = paymentTypeId;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getRecurringExpenseId() {
+        return recurringExpenseId;
+    }
+
+    public void setRecurringExpenseId(String recurringExpenseId) {
+        this.recurringExpenseId = recurringExpenseId;
     }
 }

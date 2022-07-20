@@ -9,7 +9,7 @@ public interface UserServiceInterface {
 
     List<UserDto> getUsers();
 
-    UserDto getUser(long userId);
+    UserDto getUser(String userId);
 
     boolean usersExist();
 

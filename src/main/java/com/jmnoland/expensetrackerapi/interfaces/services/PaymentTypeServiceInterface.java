@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PaymentTypeServiceInterface {
 
-    List<PaymentTypeDto> getPaymentTypes(long userId);
+    List<PaymentTypeDto> getPaymentTypes(String userId);
 
     ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType);
 

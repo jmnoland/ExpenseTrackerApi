@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ExpenseServiceInterface {
 
-    List<ExpenseDto> getExpenses(long userId);
+    List<ExpenseDto> getExpenses(String userId);
 
     ServiceResponse<ExpenseDto> insert(ExpenseDto expense);
 

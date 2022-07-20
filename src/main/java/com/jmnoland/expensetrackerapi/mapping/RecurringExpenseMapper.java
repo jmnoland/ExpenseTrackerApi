@@ -5,10 +5,12 @@ import com.jmnoland.expensetrackerapi.models.entities.RecurringExpense;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Mapper
+@Component
 public interface RecurringExpenseMapper {
 
     RecurringExpenseMapper INSTANCE = Mappers.getMapper(RecurringExpenseMapper.class);

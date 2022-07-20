@@ -1,7 +1,8 @@
 package com.jmnoland.expensetrackerapi.controllers;
 
-import com.jmnoland.expensetrackerapi.models.entities.Expense;
-import com.jmnoland.expensetrackerapi.repositories.ExpenseRepository;
+import com.jmnoland.expensetrackerapi.models.dtos.ExpenseDto;
+import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
+import com.jmnoland.expensetrackerapi.services.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/expense")
 public class ExpenseController {
 
+    private final ExpenseService expenseService;
+
     @Autowired
-    private ExpenseRepository expenseRepository;
+    public ExpenseController(ExpenseService expenseService) {
+        this.expenseService = expenseService;
+    }
 
     @GetMapping()
     public String findById() {
@@ -21,8 +26,7 @@ public class ExpenseController {
     }
 
     @PostMapping()
-    public Expense addExpense(Expense expense) {
-        expenseRepository.insert(expense);
-        return expense;
+    public ServiceResponse<ExpenseDto> addExpense(ExpenseDto expense) {
+        return this.expenseService.insert(expense);
     }
 }

@@ -18,33 +18,27 @@ public class PaymentTypeRepository implements PaymentTypeRepositoryInterface {
         this.paymentTypeDAO = paymentTypeDAO;
     }
 
-    @Override
     public List<PaymentType> getPaymentTypes(String userId) {
-        return null;
+        return this.paymentTypeDAO.findPaymentTypeByUserId(userId);
     }
 
-    @Override
     public boolean paymentTypeExistsId(String paymentTypeId) {
-        return false;
+        return this.paymentTypeDAO.existsById(paymentTypeId);
     }
 
-    @Override
     public boolean paymentTypeExists(String paymentTypeName) {
-        return false;
+        return this.paymentTypeDAO.paymentTypeExistsByName(paymentTypeName);
     }
 
-    @Override
     public void insert(PaymentType paymentType) {
-
+        this.paymentTypeDAO.insert(paymentType);
     }
 
-    @Override
     public void update(PaymentType paymentType) {
-
+        this.paymentTypeDAO.save(paymentType);
     }
 
-    @Override
     public void delete(PaymentType paymentType) {
-
+        this.paymentTypeDAO.delete(paymentType);
     }
 }

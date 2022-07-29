@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ExpenseRepository implements ExpenseRepositoryInterface {
@@ -18,33 +19,27 @@ public class ExpenseRepository implements ExpenseRepositoryInterface {
         this.expenseDao = expenseDao;
     }
 
-    @Override
     public List<Expense> getExpenses(String userId) {
-        return null;
+        return this.expenseDao.findExpensesByUserId(userId);
     }
 
-    @Override
     public boolean expenseExists(String expenseId) {
-        return false;
+        return this.expenseDao.existsById(expenseId);
     }
 
-    @Override
-    public Expense getExpense(String expenseId) {
-        return null;
+    public Optional<Expense> getExpense(String expenseId) {
+        return this.expenseDao.findById(expenseId);
     }
 
-    @Override
     public void insert(Expense expense) {
-
+        this.expenseDao.insert(expense);
     }
 
-    @Override
     public void update(Expense expense) {
-
+        this.expenseDao.save(expense);
     }
 
-    @Override
     public void delete(Expense expense) {
-
+        this.expenseDao.delete(expense);
     }
 }

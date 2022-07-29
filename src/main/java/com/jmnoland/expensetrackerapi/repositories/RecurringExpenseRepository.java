@@ -18,28 +18,23 @@ public class RecurringExpenseRepository implements RecurringExpenseRepositoryInt
         this.recurringExpenseDAO = recurringExpenseDAO;
     }
 
-    @Override
     public List<RecurringExpense> getRecurringExpenses(String userId) {
-        return null;
+        return this.recurringExpenseDAO.findRecurringExpensesByUserId(userId);
     }
 
-    @Override
     public boolean recurringExpenseExists(String recurringExpenseId) {
-        return false;
+        return this.recurringExpenseDAO.existsById(recurringExpenseId);
     }
 
-    @Override
     public void insert(RecurringExpense recurringExpense) {
-
+        this.recurringExpenseDAO.insert(recurringExpense);
     }
 
-    @Override
     public void update(RecurringExpense recurringExpense) {
-
+        this.recurringExpenseDAO.save(recurringExpense);
     }
 
-    @Override
     public void delete(RecurringExpense recurringExpense) {
-
+        this.recurringExpenseDAO.delete(recurringExpense);
     }
 }

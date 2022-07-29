@@ -3,6 +3,7 @@ package com.jmnoland.expensetrackerapi.interfaces.repositories;
 import com.jmnoland.expensetrackerapi.models.entities.Expense;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ExpenseRepositoryInterface {
 
@@ -10,7 +11,7 @@ public interface ExpenseRepositoryInterface {
 
     boolean expenseExists(String expenseId);
 
-    Expense getExpense(String expenseId);
+    Optional<Expense> getExpense(String expenseId);
 
     void insert(Expense expense);
 

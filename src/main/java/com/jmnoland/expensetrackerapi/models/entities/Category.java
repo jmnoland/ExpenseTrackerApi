@@ -10,6 +10,7 @@ public class Category {
 
     @Id
     private final String categoryId;
+    private final String userId;
     private String name;
     private final Date createdAt;
 
@@ -20,13 +21,15 @@ public class Category {
         return name;
     }
     public Date getCreatedAt() { return createdAt; }
+    public String getUserId() { return userId; }
 
     public void setName( String name) {
         this.name = name;
     }
 
-    public Category(String categoryId, String name, Date createdAt) {
+    public Category(String categoryId, String userId, String name, Date createdAt) {
         this.categoryId = categoryId;
+        this.userId = userId;
         this.name = name;
         this.createdAt = createdAt;
     }

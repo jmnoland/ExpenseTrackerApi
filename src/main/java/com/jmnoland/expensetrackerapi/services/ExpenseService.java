@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExpenseService implements ExpenseServiceInterface {
@@ -69,9 +70,11 @@ public class ExpenseService implements ExpenseServiceInterface {
         );
     }
 
-    public void delete(ExpenseDto expense) {
-        Expense existing = this.mapper.dtoToEntity(expense);
-        this.expenseRepository.delete(existing);
+    public void delete(String expenseId) {
+        Optional<Expense> existing = this.expenseRepository.getExpense(expenseId);
+        if (!existing.isPresent()) return;
+        Expense test = existing.get();
+        this.expenseRepository.delete(test);
     }
 
     public ServiceResponse<ExpenseDto> update(ExpenseDto expense) {

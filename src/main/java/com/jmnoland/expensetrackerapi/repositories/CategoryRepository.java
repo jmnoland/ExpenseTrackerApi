@@ -18,28 +18,23 @@ public class CategoryRepository implements CategoryRepositoryInterface {
         this.categoryDAO = categoryDAO;
     }
 
-    @Override
-    public List<Category> getAllCategories() {
-        return null;
+    public List<Category> getAllCategoriesByUserId(String userId) {
+        return this.categoryDAO.findCategoriesByUserId(userId);
     }
 
-    @Override
     public boolean categoryExists(String categoryId) {
-        return false;
+        return this.categoryDAO.existsById(categoryId);
     }
 
-    @Override
     public void insert(Category category) {
-
+        this.categoryDAO.insert(category);
     }
 
-    @Override
     public void update(Category category) {
-
+        this.categoryDAO.save(category);
     }
 
-    @Override
     public void delete(Category category) {
-
+        this.categoryDAO.delete(category);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepository implements UserRepositoryInterface {
@@ -20,41 +21,32 @@ public class UserRepository implements UserRepositoryInterface {
 
     @Override
     public List<User> getUsers() {
-        return null;
+        return this.userDAO.findAll();
     }
 
-    @Override
-    public User getUser(String userId) {
-        return null;
+    public Optional<User> getUser(String userId) {
+        return this.userDAO.findById(userId);
     }
 
-    @Override
-    public User getUserByEmail(String email) {
-        return null;
+    public Optional<User> getUserByEmail(String email) {
+        return this.userDAO.findByEmail(email);
     }
 
-    @Override
     public boolean userExists(String userId) {
-        return false;
+        return this.userDAO.existsById(userId);
     }
 
-    @Override
-    public boolean usersExist() {
-        return false;
-    }
-
-    @Override
     public User insert(User user) {
-        return null;
+        this.userDAO.insert(user);
+        return user;
     }
 
-    @Override
     public User update(User user) {
-        return null;
+        this.userDAO.save(user);
+        return user;
     }
 
-    @Override
     public void delete(User user) {
-
+        this.userDAO.delete(user);
     }
 }

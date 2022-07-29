@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Mapper
-@Component
+@Mapper(componentModel = "spring")
 public interface PaymentTypeMapper {
 
     PaymentTypeMapper INSTANCE = Mappers.getMapper(PaymentTypeMapper.class);

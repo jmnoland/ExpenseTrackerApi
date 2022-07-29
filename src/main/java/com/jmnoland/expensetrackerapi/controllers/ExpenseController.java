@@ -1,8 +1,8 @@
 package com.jmnoland.expensetrackerapi.controllers;
 
+import com.jmnoland.expensetrackerapi.interfaces.services.ExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.ExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
-import com.jmnoland.expensetrackerapi.services.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +12,10 @@ import java.util.List;
 @RequestMapping("/api/expense")
 public class ExpenseController {
 
-    private final ExpenseService expenseService;
+    private final ExpenseServiceInterface expenseService;
 
     @Autowired
-    public ExpenseController(ExpenseService expenseService) {
+    public ExpenseController(ExpenseServiceInterface expenseService) {
         this.expenseService = expenseService;
     }
 

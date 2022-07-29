@@ -4,14 +4,15 @@ import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import com.jmnoland.expensetrackerapi.models.dtos.UserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserServiceInterface {
 
     List<UserDto> getUsers();
 
-    UserDto getUser(String userId);
+    Optional<UserDto> getUser(String userId);
 
-    boolean usersExist();
+    boolean userExist(String userId);
 
     ServiceResponse<UserDto> insert(UserDto userDto);
 

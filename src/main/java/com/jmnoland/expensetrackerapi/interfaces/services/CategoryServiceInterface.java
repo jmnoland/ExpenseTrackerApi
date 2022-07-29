@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CategoryServiceInterface {
 
-    List<CategoryDto> getAllCategories();
+    List<CategoryDto> getAllCategories(String userId);
 
     ServiceResponse<CategoryDto> insert(CategoryDto category);
 

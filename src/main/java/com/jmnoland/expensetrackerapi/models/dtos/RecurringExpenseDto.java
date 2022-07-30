@@ -1,6 +1,7 @@
 package com.jmnoland.expensetrackerapi.models.dtos;
 
 import com.jmnoland.expensetrackerapi.models.enums.Frequency;
+import com.mongodb.lang.Nullable;
 
 import java.util.Date;
 
@@ -11,9 +12,12 @@ public class RecurringExpenseDto {
     public String paymentTypeId;
     public String name;
     public Date startDate;
+    @Nullable
     public Date endDate;
     public Frequency frequency;
     public Float amount;
+    @Nullable
+    public Date lastExpenseDate;
 
     public RecurringExpenseDto(
             String recurringExpenseId,
@@ -22,9 +26,10 @@ public class RecurringExpenseDto {
             String paymentTypeId,
             String name,
             Date startDate,
-            Date endDate,
+            @Nullable Date endDate,
             Frequency frequency,
-            Float amount
+            Float amount,
+            @Nullable Date lastExpenseDate
     ) {
         this.recurringExpenseId = recurringExpenseId;
         this.userId = userId;
@@ -35,5 +40,6 @@ public class RecurringExpenseDto {
         this.endDate = endDate;
         this.frequency = frequency;
         this.amount = amount;
+        this.lastExpenseDate = lastExpenseDate;
     }
 }

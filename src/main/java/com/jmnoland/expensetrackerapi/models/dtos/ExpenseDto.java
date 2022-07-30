@@ -10,7 +10,7 @@ public class ExpenseDto {
     public String name;
     public Date date;
     public Float amount;
-    public Long recurringExpenseId;
+    public String recurringExpenseId;
 
     public ExpenseDto(
             String expenseId,
@@ -20,7 +20,7 @@ public class ExpenseDto {
             String name,
             Date date,
             Float amount,
-            Long recurringExpenseId
+            String recurringExpenseId
     ) {
         this.expenseId = expenseId;
         this.userId = userId;

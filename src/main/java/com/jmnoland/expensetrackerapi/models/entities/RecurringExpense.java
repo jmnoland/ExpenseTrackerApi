@@ -1,5 +1,6 @@
 package com.jmnoland.expensetrackerapi.models.entities;
 
+import com.mongodb.lang.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,9 +16,12 @@ public class RecurringExpense {
     private String paymentTypeId;
     private String name;
     private Date startDate;
+    @Nullable
     private Date endDate;
     private String frequency;
     private Float amount;
+    @Nullable
+    private Date lastExpenseDate;
 
     public String getRecurringExpenseId() {
         return recurringExpenseId;
@@ -34,7 +38,7 @@ public class RecurringExpense {
     public String getName() {
         return name;
     }
-    public Date getStartDate() {
+    public @Nullable Date getStartDate() {
         return startDate;
     }
     public Date getEndDate() {
@@ -62,7 +66,7 @@ public class RecurringExpense {
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
-    public void setEndDate(Date endDate) {
+    public void setEndDate(@Nullable Date endDate) {
         this.endDate = endDate;
     }
     public void setFrequency(String frequency) {
@@ -79,9 +83,10 @@ public class RecurringExpense {
             String paymentTypeId,
             String name,
             Date startDate,
-            Date endDate,
+            @Nullable Date endDate,
             String frequency,
-            Float amount) {
+            Float amount,
+            @Nullable Date lastExpenseDate) {
         this.recurringExpenseId = recurringExpenseId;
         this.userId = userId;
         this.categoryId = categoryId;
@@ -91,5 +96,14 @@ public class RecurringExpense {
         this.endDate = endDate;
         this.frequency = frequency;
         this.amount = amount;
+        this.lastExpenseDate = lastExpenseDate;
+    }
+
+    public @Nullable Date getLastExpenseDate() {
+        return lastExpenseDate;
+    }
+
+    public void setLastExpenseDate(Date lastExpenseDate) {
+        this.lastExpenseDate = lastExpenseDate;
     }
 }

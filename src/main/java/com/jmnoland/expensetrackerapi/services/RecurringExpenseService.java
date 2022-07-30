@@ -45,7 +45,7 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
 
     public ServiceResponse<RecurringExpenseDto> insert(RecurringExpenseDto recurringExpense) {
         boolean categoryExists = this.categoryRepositoryInterface.categoryExists(recurringExpense.categoryId);
-        boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExists(recurringExpense.paymentTypeId);
+        boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExistsId(recurringExpense.paymentTypeId);
         boolean userExists = this.userRepositoryInterface.userExists(recurringExpense.userId);
 
         List<ValidationError> validationErrors = new CreateRecurringExpenseValidator()
@@ -76,7 +76,7 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
     public ServiceResponse<RecurringExpenseDto> update(RecurringExpenseDto recurringExpense) {
         boolean recurringExpenseExists = this.recurringExpenseRepository.recurringExpenseExists(recurringExpense.recurringExpenseId);
         boolean categoryExists = this.categoryRepositoryInterface.categoryExists(recurringExpense.categoryId);
-        boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExists(recurringExpense.paymentTypeId);
+        boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExistsId(recurringExpense.paymentTypeId);
         boolean userExists = this.userRepositoryInterface.userExists(recurringExpense.userId);
 
         List<ValidationError> validationErrors = new UpdateRecurringExpenseValidator()

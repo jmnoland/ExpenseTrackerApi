@@ -35,7 +35,7 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
     }
 
     public ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType) {
-        boolean paymentTypeExists = this.paymentTypeRepository.paymentTypeExists(paymentType.name);
+        boolean paymentTypeExists = this.paymentTypeRepository.paymentTypeExistsId(paymentType.paymentTypeId);
         boolean userExists = this.userRepositoryInterface.userExists(paymentType.userId);
 
         List<ValidationError> validationErrors = new CreatePaymentTypeValidator()

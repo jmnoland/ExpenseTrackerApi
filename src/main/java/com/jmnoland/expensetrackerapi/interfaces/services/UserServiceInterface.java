@@ -12,6 +12,8 @@ public interface UserServiceInterface {
 
     Optional<UserDto> getUser(String userId);
 
+    Optional<UserDto> getUserByEmail(String email);
+
     boolean userExist(String userId);
 
     ServiceResponse<UserDto> insert(UserDto userDto);

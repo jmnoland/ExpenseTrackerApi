@@ -12,8 +12,12 @@ import com.jmnoland.expensetrackerapi.validators.user.UpdateUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Optional;
+
+import static com.jmnoland.expensetrackerapi.services.AuthenticationService.generateStrongPasswordHash;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -36,7 +40,13 @@ public class UserService implements UserServiceInterface {
     public Optional<UserDto> getUser(String userId) {
         Optional<User> existing = this.userRepository.getUser(userId);
         if (existing == null || !existing.isPresent()) return Optional.empty();
-        return Optional.ofNullable(this.mapper.entityToDto(existing.get()));
+        return Optional.of(this.mapper.entityToDto(existing.get()));
+    }
+
+    public Optional<UserDto> getUserByEmail(String email) {
+        Optional<User> existing = this.userRepository.getUserByEmail(email);
+        if (existing == null || !existing.isPresent())  return Optional.empty();
+        return Optional.of(this.mapper.entityToDto(existing.get()));
     }
 
     public boolean userExist(String userId) {
@@ -52,12 +62,14 @@ public class UserService implements UserServiceInterface {
         if (validationErrors.isEmpty()) {
             newUser = this.mapper.dtoToEntity(userDto);
             try {
+                newUser.setPassword(generateStrongPasswordHash(userDto.password));
                 newUser = this.userRepository.insert(newUser);
-            } catch (Exception exception) {
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException exception) {
                 return new ServiceResponse<>(null, false, null);
             }
         }
 
+        newUser.setPassword(null);
         return new ServiceResponse<>(
                 this.mapper.entityToDto(newUser),
                 validationErrors.isEmpty(),

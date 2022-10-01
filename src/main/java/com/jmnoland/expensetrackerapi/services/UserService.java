@@ -67,9 +67,9 @@ public class UserService implements UserServiceInterface {
             } catch (NoSuchAlgorithmException | InvalidKeySpecException exception) {
                 return new ServiceResponse<>(null, false, null);
             }
+            newUser.setPassword(null);
         }
 
-        newUser.setPassword(null);
         return new ServiceResponse<>(
                 this.mapper.entityToDto(newUser),
                 validationErrors.isEmpty(),

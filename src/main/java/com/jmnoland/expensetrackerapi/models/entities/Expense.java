@@ -1,10 +1,14 @@
 package com.jmnoland.expensetrackerapi.models.entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+@Getter
+@Setter
 @Document("expenses")
 public class Expense {
 
@@ -33,62 +37,6 @@ public class Expense {
         this.name = name;
         this.date = date;
         this.amount = amount;
-        this.recurringExpenseId = recurringExpenseId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Float getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Float amount) {
-        this.amount = amount;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getPaymentTypeId() {
-        return paymentTypeId;
-    }
-
-    public void setPaymentTypeId(String paymentTypeId) {
-        this.paymentTypeId = paymentTypeId;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getRecurringExpenseId() {
-        return recurringExpenseId;
-    }
-
-    public void setRecurringExpenseId(String recurringExpenseId) {
         this.recurringExpenseId = recurringExpenseId;
     }
 }

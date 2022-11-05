@@ -1,11 +1,15 @@
 package com.jmnoland.expensetrackerapi.models.entities;
 
 import com.mongodb.lang.Nullable;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+@Getter
+@Setter
 @Document("recurringexpenses")
 public class RecurringExpense {
 
@@ -22,59 +26,6 @@ public class RecurringExpense {
     private Float amount;
     @Nullable
     private Date lastExpenseDate;
-
-    public String getRecurringExpenseId() {
-        return recurringExpenseId;
-    }
-    public String getUserId() {
-        return userId;
-    }
-    public String getCategoryId() {
-        return categoryId;
-    }
-    public String getPaymentTypeId() {
-        return paymentTypeId;
-    }
-    public String getName() {
-        return name;
-    }
-    public @Nullable Date getStartDate() {
-        return startDate;
-    }
-    public Date getEndDate() {
-        return endDate;
-    }
-    public String getFrequency() {
-        return frequency;
-    }
-    public Float getAmount() {
-        return amount;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-    }
-    public void setPaymentTypeId(String paymentTypeId) {
-        this.paymentTypeId = paymentTypeId;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-    public void setEndDate(@Nullable Date endDate) {
-        this.endDate = endDate;
-    }
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
-    }
-    public void setAmount(Float amount) {
-        this.amount = amount;
-    }
 
     public RecurringExpense(
             String recurringExpenseId,
@@ -96,14 +47,6 @@ public class RecurringExpense {
         this.endDate = endDate;
         this.frequency = frequency;
         this.amount = amount;
-        this.lastExpenseDate = lastExpenseDate;
-    }
-
-    public @Nullable Date getLastExpenseDate() {
-        return lastExpenseDate;
-    }
-
-    public void setLastExpenseDate(Date lastExpenseDate) {
         this.lastExpenseDate = lastExpenseDate;
     }
 }

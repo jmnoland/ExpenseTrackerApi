@@ -25,17 +25,17 @@ public class UserController {
     }
 
     @PostMapping()
-    public ServiceResponse<UserDto> createCategory(@RequestBody UserDto userDto) {
+    public ServiceResponse<UserDto> createUser(@RequestBody UserDto userDto) {
         return this.userService.insert(userDto);
     }
 
     @PatchMapping()
-    public ServiceResponse<UserDto> updateCategory(@RequestBody UserDto userDto) {
+    public ServiceResponse<UserDto> updateUser(@RequestBody UserDto userDto) {
         return this.userService.update(userDto);
     }
 
     @DeleteMapping()
-    public void deleteCategory(@RequestBody UserDto userDto) {
+    public void deleteUser(@RequestBody UserDto userDto) {
         this.userService.delete(userDto);
     }
 }

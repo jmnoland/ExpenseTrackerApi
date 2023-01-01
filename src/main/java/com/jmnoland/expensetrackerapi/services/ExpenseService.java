@@ -3,7 +3,6 @@ package com.jmnoland.expensetrackerapi.services;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.CategoryRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.ExpenseRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.PaymentTypeRepositoryInterface;
-import com.jmnoland.expensetrackerapi.interfaces.repositories.UserRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.ExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.mapping.ExpenseMapper;
 import com.jmnoland.expensetrackerapi.models.dtos.ExpenseDto;
@@ -24,34 +23,30 @@ public class ExpenseService implements ExpenseServiceInterface {
     private final ExpenseRepositoryInterface expenseRepository;
     private final CategoryRepositoryInterface categoryRepositoryInterface;
     private final PaymentTypeRepositoryInterface paymentTypeRepositoryInterface;
-    private final UserRepositoryInterface userRepositoryInterface;
     private final ExpenseMapper mapper;
 
     @Autowired
     public ExpenseService(ExpenseRepositoryInterface expenseRepository,
                           CategoryRepositoryInterface categoryRepositoryInterface,
                           PaymentTypeRepositoryInterface paymentTypeRepositoryInterface,
-                          UserRepositoryInterface userRepositoryInterface,
                           ExpenseMapper expenseMapper) {
         this.expenseRepository = expenseRepository;
         this.categoryRepositoryInterface = categoryRepositoryInterface;
         this.paymentTypeRepositoryInterface = paymentTypeRepositoryInterface;
-        this.userRepositoryInterface = userRepositoryInterface;
         this.mapper = expenseMapper;
     }
 
-    public List<ExpenseDto> getExpenses(String userId) {
-        List<Expense> existingExpenses = this.expenseRepository.getExpenses(userId);
+    public List<ExpenseDto> getExpenses(String clientId) {
+        List<Expense> existingExpenses = this.expenseRepository.getExpenses(clientId);
         return this.mapper.entityToDto(existingExpenses);
     }
 
     public ServiceResponse<ExpenseDto> insert(ExpenseDto expense) {
         boolean categoryExists = this.categoryRepositoryInterface.categoryExists(expense.categoryId);
         boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExistsId(expense.paymentTypeId);
-        boolean userExists = this.userRepositoryInterface.userExists(expense.userId);
 
         List<ValidationError> validationErrors = new CreateExpenseValidator()
-                .validate(expense, categoryExists, paymentTypeExists, userExists);
+                .validate(expense, categoryExists, paymentTypeExists);
 
         Expense newExpense = null;
         if (validationErrors.isEmpty()) {
@@ -81,10 +76,9 @@ public class ExpenseService implements ExpenseServiceInterface {
         boolean expenseExists = this.expenseRepository.expenseExists(expense.expenseId);
         boolean categoryExists = this.categoryRepositoryInterface.categoryExists(expense.categoryId);
         boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExists(expense.paymentTypeId);
-        boolean userExists = this.userRepositoryInterface.userExists(expense.userId);
 
         List<ValidationError> validationErrors = new UpdateExpenseValidator()
-                .validate(expense, expenseExists, categoryExists, paymentTypeExists, userExists);
+                .validate(expense, expenseExists, categoryExists, paymentTypeExists);
 
         Expense updatedExpense = null;
         if (validationErrors.isEmpty()) {

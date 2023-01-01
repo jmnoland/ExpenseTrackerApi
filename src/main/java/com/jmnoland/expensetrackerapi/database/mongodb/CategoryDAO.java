@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 public interface CategoryDAO extends MongoRepository<Category, String> {
-    @Query("{'userId' : ?0}")
-    List<Category> findCategoriesByUserId(String userId);
+    @Query("{'clientId' : ?0}")
+    List<Category> findCategoriesByClientId(String clientId);
 }

@@ -13,8 +13,7 @@ public class UpdateRecurringExpenseValidator {
     public List<ValidationError> validate(RecurringExpenseDto recurringExpense,
                                           boolean recurringExpenseExists,
                                           boolean categoryExists,
-                                          boolean paymentTypeExists,
-                                          boolean userExists) {
+                                          boolean paymentTypeExists) {
         List<ValidationError> validationErrors = new ArrayList<>();
         if (recurringExpense.recurringExpenseId == null) {
             validationErrors.add(new ValidationError(
@@ -28,15 +27,10 @@ public class UpdateRecurringExpenseValidator {
             ));
         }
 
-        if (recurringExpense.userId == null) {
+        if (recurringExpense.clientId == null) {
             validationErrors.add(new ValidationError(
-                    "UserId",
-                    "The user is required"
-            ));
-        } else if (!userExists) {
-            validationErrors.add(new ValidationError(
-                    "UserId",
-                    "User does not exist"
+                    "ClientId",
+                    "The client is required"
             ));
         }
 

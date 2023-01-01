@@ -1,7 +1,6 @@
 package com.jmnoland.expensetrackerapi.services;
 
 import com.jmnoland.expensetrackerapi.interfaces.repositories.PaymentTypeRepositoryInterface;
-import com.jmnoland.expensetrackerapi.interfaces.repositories.UserRepositoryInterface;
 import com.jmnoland.expensetrackerapi.mapping.PaymentTypeMapper;
 import com.jmnoland.expensetrackerapi.models.dtos.PaymentTypeDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
@@ -29,13 +28,11 @@ public class PaymentTypeServiceTest {
     @Mock
     private PaymentTypeRepositoryInterface paymentTypeRepositoryInterface;
     @Mock
-    private UserRepositoryInterface userRepositoryInterface;
-    @Mock
     private PaymentTypeMapper mapper;
 
     @Before
     public void Setup() {
-        this.classUnderTest = new PaymentTypeService(paymentTypeRepositoryInterface, userRepositoryInterface, mapper);
+        this.classUnderTest = new PaymentTypeService(paymentTypeRepositoryInterface, mapper);
     }
 
     // insert tests
@@ -45,7 +42,6 @@ public class PaymentTypeServiceTest {
         PaymentType output = this.mapper.dtoToEntity(request);
         when(this.mapper.dtoToEntity(request)).thenReturn(output);
         when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(false);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
@@ -58,7 +54,6 @@ public class PaymentTypeServiceTest {
     public void InsertPaymentType_ShouldNotBeSuccessful_WhenRequiredFieldsAreNULL() {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, null, null, null);
         PaymentType output = this.mapper.dtoToEntity(request);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
@@ -72,7 +67,6 @@ public class PaymentTypeServiceTest {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
@@ -86,7 +80,6 @@ public class PaymentTypeServiceTest {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", -1F, null);
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(false);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
@@ -100,7 +93,6 @@ public class PaymentTypeServiceTest {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(false);
-        when(userRepositoryInterface.userExists("1")).thenReturn(false);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
@@ -117,7 +109,6 @@ public class PaymentTypeServiceTest {
         PaymentType output = this.mapper.dtoToEntity(request);
         when(this.mapper.dtoToEntity(request)).thenReturn(output);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 
@@ -131,7 +122,6 @@ public class PaymentTypeServiceTest {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, null, null, null);
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 
@@ -145,7 +135,6 @@ public class PaymentTypeServiceTest {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(false);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 
@@ -159,7 +148,6 @@ public class PaymentTypeServiceTest {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(false);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 
@@ -173,7 +161,6 @@ public class PaymentTypeServiceTest {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", -1F, null);
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 

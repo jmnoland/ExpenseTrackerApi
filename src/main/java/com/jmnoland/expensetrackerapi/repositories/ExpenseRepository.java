@@ -19,8 +19,8 @@ public class ExpenseRepository implements ExpenseRepositoryInterface {
         this.expenseDao = expenseDao;
     }
 
-    public List<Expense> getExpenses(String userId) {
-        return this.expenseDao.findExpensesByUserId(userId);
+    public List<Expense> getExpenses(String clientId) {
+        return this.expenseDao.findExpensesByClientId(clientId);
     }
 
     public boolean expenseExists(String expenseId) {

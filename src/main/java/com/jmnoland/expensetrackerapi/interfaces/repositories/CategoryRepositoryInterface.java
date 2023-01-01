@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface CategoryRepositoryInterface {
 
-    List<Category> getAllCategoriesByUserId(String userId);
+
+    List<Category> getAllCategoriesByClientId(String clientId);
 
     boolean categoryExists(String categoryId);
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PaymentTypeRepositoryInterface {
 
-    List<PaymentType> getPaymentTypes(String userId);
+    List<PaymentType> getPaymentTypes(String clientId);
 
     boolean paymentTypeExistsId(String paymentTypeId);
 

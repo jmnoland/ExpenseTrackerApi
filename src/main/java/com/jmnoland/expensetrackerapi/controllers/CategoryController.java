@@ -20,8 +20,8 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public List<CategoryDto> getCategories(String userId) {
-        return this.categoryService.getAllCategories(userId);
+    public List<CategoryDto> getCategories(String clientId) {
+        return this.categoryService.getAllCategories(clientId);
     }
 
     @PostMapping()

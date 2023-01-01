@@ -20,8 +20,8 @@ public class RecurringExpenseController {
     }
 
     @GetMapping()
-    public List<RecurringExpenseDto> getRecurringExpenses(String userId) {
-        return this.recurringExpenseService.getRecurringExpenses(userId);
+    public List<RecurringExpenseDto> getRecurringExpenses(String clientId) {
+        return this.recurringExpenseService.getRecurringExpenses(clientId);
     }
 
     @PostMapping()

@@ -11,13 +11,12 @@ public class UpdateExpenseValidator {
     public List<ValidationError> validate(ExpenseDto expense,
                                           boolean expenseExists,
                                           boolean categoryExists,
-                                          boolean paymentTypeExists,
-                                          boolean userExists) {
+                                          boolean paymentTypeExists) {
         List<ValidationError> validationErrors = new ArrayList<>();
-        if (expense.userId == null) {
+        if (expense.clientId == null) {
             validationErrors.add(new ValidationError(
-                    "UserId",
-                    "The user is required"
+                    "ClientId",
+                    "The client is required"
             ));
         }
         if (expense.categoryId == null) {
@@ -67,12 +66,6 @@ public class UpdateExpenseValidator {
             validationErrors.add(new ValidationError(
                     "PaymentTypeId",
                     "Payment type does not exist"
-            ));
-        }
-        if (!userExists) {
-            validationErrors.add(new ValidationError(
-                    "UserId",
-                    "User does not exist"
             ));
         }
         return validationErrors;

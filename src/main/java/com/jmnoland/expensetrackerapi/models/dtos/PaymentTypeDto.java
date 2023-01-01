@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class PaymentTypeDto {
     public String paymentTypeId;
-    public String userId;
+    public String clientId;
     public boolean active;
     public String name;
     public Float charge;
@@ -12,14 +12,14 @@ public class PaymentTypeDto {
 
     public PaymentTypeDto(
             String paymentTypeId,
-            String userId,
+            String clientId,
             boolean active,
             String name,
             Float charge,
             Date archivedAt
     ) {
         this.paymentTypeId = paymentTypeId;
-        this.userId = userId;
+        this.clientId = clientId;
         this.active = active;
         this.name = name;
         this.charge = charge;

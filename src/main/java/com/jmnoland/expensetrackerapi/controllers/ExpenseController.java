@@ -20,8 +20,8 @@ public class ExpenseController {
     }
 
     @GetMapping()
-    public List<ExpenseDto> getExpenses(String userId) {
-        return this.expenseService.getExpenses(userId);
+    public List<ExpenseDto> getExpenses(String clientId) {
+        return this.expenseService.getExpenses(clientId);
     }
 
     @PostMapping()

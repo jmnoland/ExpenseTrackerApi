@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 public interface RecurringExpenseDAO extends MongoRepository<RecurringExpense, String> {
-    @Query("{'userId' : ?0}")
-    List<RecurringExpense> findRecurringExpensesByUserId(String userId);
+    @Query("{'clientId' : ?0}")
+    List<RecurringExpense> findRecurringExpensesByClientId(String clientId);
 }

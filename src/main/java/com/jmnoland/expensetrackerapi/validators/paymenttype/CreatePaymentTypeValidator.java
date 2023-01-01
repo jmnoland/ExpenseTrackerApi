@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CreatePaymentTypeValidator {
 
-    public List<ValidationError> validate(PaymentTypeDto paymentTypeDto, boolean paymentTypeNameExists, boolean userExists) {
+    public List<ValidationError> validate(PaymentTypeDto paymentTypeDto, boolean paymentTypeNameExists) {
         List<ValidationError> validationErrors = new ArrayList<>();
 
         if (paymentTypeDto.name == null || paymentTypeDto.name.equals("")) {
@@ -32,13 +32,6 @@ public class CreatePaymentTypeValidator {
             validationErrors.add(new ValidationError(
                     "Charge",
                     "Charge cannot be less than zero"
-            ));
-        }
-
-        if (!userExists) {
-            validationErrors.add(new ValidationError(
-                    "UserId",
-                    "The user does not exist"
             ));
         }
 

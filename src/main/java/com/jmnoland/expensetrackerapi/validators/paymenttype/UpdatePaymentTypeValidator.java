@@ -8,7 +8,7 @@ import java.util.List;
 
 public class UpdatePaymentTypeValidator {
 
-    public List<ValidationError> validate(PaymentTypeDto paymentTypeDto, boolean paymentTypeExists, boolean userExists) {
+    public List<ValidationError> validate(PaymentTypeDto paymentTypeDto, boolean paymentTypeExists) {
         List<ValidationError> validationErrors = new ArrayList<>();
 
         if (paymentTypeDto.name == null || paymentTypeDto.name.equals("")) {
@@ -29,12 +29,6 @@ public class UpdatePaymentTypeValidator {
             ));
         }
 
-        if (!userExists) {
-            validationErrors.add(new ValidationError(
-                    "UserId",
-                    "The user does not exist"
-            ));
-        }
         if (!paymentTypeExists) {
             validationErrors.add(new ValidationError(
                     "PaymentTypeId",

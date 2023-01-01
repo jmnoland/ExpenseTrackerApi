@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 public interface ExpenseDAO extends MongoRepository<Expense, String> {
-    @Query("{'userId' : ?0}")
-    List<Expense> findExpensesByUserId(String userId);
+    @Query("{'clientId' : ?0}")
+    List<Expense> findExpensesByClientId(String clientId);
 }

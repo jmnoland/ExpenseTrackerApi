@@ -18,8 +18,8 @@ public class RecurringExpenseRepository implements RecurringExpenseRepositoryInt
         this.recurringExpenseDAO = recurringExpenseDAO;
     }
 
-    public List<RecurringExpense> getRecurringExpenses(String userId) {
-        return this.recurringExpenseDAO.findRecurringExpensesByUserId(userId);
+    public List<RecurringExpense> getRecurringExpenses(String clientId) {
+        return this.recurringExpenseDAO.findRecurringExpensesByClientId(clientId);
     }
 
     public boolean recurringExpenseExists(String recurringExpenseId) {

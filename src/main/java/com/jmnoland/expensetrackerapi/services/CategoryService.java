@@ -26,13 +26,13 @@ public class CategoryService implements CategoryServiceInterface {
         this.mapper = categoryMapper;
     }
 
-    public List<CategoryDto> getAllCategories(String userId) {
-        List<Category> categoryList = this.categoryRepository.getAllCategoriesByUserId(userId);
+    public List<CategoryDto> getAllCategories(String clientId) {
+        List<Category> categoryList = this.categoryRepository.getAllCategoriesByClientId(clientId);
         return this.mapper.entityToDto(categoryList);
     }
 
     public ServiceResponse<CategoryDto> insert(CategoryDto category) {
-        List<Category> categoryList = this.categoryRepository.getAllCategoriesByUserId(category.userId);
+        List<Category> categoryList = this.categoryRepository.getAllCategoriesByClientId(category.clientId);
 
         List<ValidationError> validationErrors = new CreateCategoryValidator().validate(category, categoryList);
 
@@ -59,7 +59,7 @@ public class CategoryService implements CategoryServiceInterface {
     }
 
     public ServiceResponse<CategoryDto> update(CategoryDto category) {
-        List<Category> categoryList = this.categoryRepository.getAllCategoriesByUserId(category.userId);
+        List<Category> categoryList = this.categoryRepository.getAllCategoriesByClientId(category.clientId);
 
         List<ValidationError> validationErrors = new UpdateCategoryValidator().validate(category, categoryList);
 

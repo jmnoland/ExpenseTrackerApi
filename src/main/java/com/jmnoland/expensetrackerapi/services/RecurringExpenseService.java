@@ -3,7 +3,6 @@ package com.jmnoland.expensetrackerapi.services;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.CategoryRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.PaymentTypeRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.RecurringExpenseRepositoryInterface;
-import com.jmnoland.expensetrackerapi.interfaces.repositories.UserRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.RecurringExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.mapping.RecurringExpenseMapper;
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
@@ -23,33 +22,29 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
     private final RecurringExpenseRepositoryInterface recurringExpenseRepository;
     private final CategoryRepositoryInterface categoryRepositoryInterface;
     private final PaymentTypeRepositoryInterface paymentTypeRepositoryInterface;
-    private final UserRepositoryInterface userRepositoryInterface;
     private final RecurringExpenseMapper mapper;
     @Autowired
     public RecurringExpenseService(RecurringExpenseRepositoryInterface recurringExpenseRepository,
                                    CategoryRepositoryInterface categoryRepositoryInterface,
                                    PaymentTypeRepositoryInterface paymentTypeRepositoryInterface,
-                                   UserRepositoryInterface userRepositoryInterface,
                                    RecurringExpenseMapper recurringExpenseMapper) {
         this.recurringExpenseRepository = recurringExpenseRepository;
         this.categoryRepositoryInterface =categoryRepositoryInterface;
         this.paymentTypeRepositoryInterface = paymentTypeRepositoryInterface;
-        this.userRepositoryInterface = userRepositoryInterface;
         this.mapper = recurringExpenseMapper;
     }
 
-    public List<RecurringExpenseDto> getRecurringExpenses(String userId) {
-        List<RecurringExpense> expenses = this.recurringExpenseRepository.getRecurringExpenses(userId);
+    public List<RecurringExpenseDto> getRecurringExpenses(String clientId) {
+        List<RecurringExpense> expenses = this.recurringExpenseRepository.getRecurringExpenses(clientId);
         return this.mapper.entityToDto(expenses);
     }
 
     public ServiceResponse<RecurringExpenseDto> insert(RecurringExpenseDto recurringExpense) {
         boolean categoryExists = this.categoryRepositoryInterface.categoryExists(recurringExpense.categoryId);
         boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExistsId(recurringExpense.paymentTypeId);
-        boolean userExists = this.userRepositoryInterface.userExists(recurringExpense.userId);
 
         List<ValidationError> validationErrors = new CreateRecurringExpenseValidator()
-                .validate(recurringExpense, categoryExists, paymentTypeExists, userExists);
+                .validate(recurringExpense, categoryExists, paymentTypeExists);
 
         RecurringExpense newRecurringExpense = null;
         if (validationErrors.isEmpty()) {
@@ -77,10 +72,9 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
         boolean recurringExpenseExists = this.recurringExpenseRepository.recurringExpenseExists(recurringExpense.recurringExpenseId);
         boolean categoryExists = this.categoryRepositoryInterface.categoryExists(recurringExpense.categoryId);
         boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExistsId(recurringExpense.paymentTypeId);
-        boolean userExists = this.userRepositoryInterface.userExists(recurringExpense.userId);
 
         List<ValidationError> validationErrors = new UpdateRecurringExpenseValidator()
-                .validate(recurringExpense, recurringExpenseExists, categoryExists, paymentTypeExists, userExists);
+                .validate(recurringExpense, recurringExpenseExists, categoryExists, paymentTypeExists);
 
         RecurringExpense updatedRecurringExpense = null;
         if (validationErrors.isEmpty()) {

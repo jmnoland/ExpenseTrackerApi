@@ -18,8 +18,8 @@ public class PaymentTypeRepository implements PaymentTypeRepositoryInterface {
         this.paymentTypeDAO = paymentTypeDAO;
     }
 
-    public List<PaymentType> getPaymentTypes(String userId) {
-        return this.paymentTypeDAO.findPaymentTypeByUserId(userId);
+    public List<PaymentType> getPaymentTypes(String clientId) {
+        return this.paymentTypeDAO.findPaymentTypeByClientId(clientId);
     }
 
     public boolean paymentTypeExistsId(String paymentTypeId) {

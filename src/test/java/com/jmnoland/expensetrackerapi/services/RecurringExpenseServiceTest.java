@@ -3,7 +3,6 @@ package com.jmnoland.expensetrackerapi.services;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.CategoryRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.PaymentTypeRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.RecurringExpenseRepositoryInterface;
-import com.jmnoland.expensetrackerapi.interfaces.repositories.UserRepositoryInterface;
 import com.jmnoland.expensetrackerapi.mapping.RecurringExpenseMapper;
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
@@ -14,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.sql.Date;
@@ -39,8 +37,6 @@ public class RecurringExpenseServiceTest {
     @Mock
     private PaymentTypeRepositoryInterface paymentTypeRepositoryInterface;
     @Mock
-    private UserRepositoryInterface userRepositoryInterface;
-    @Mock
     private RecurringExpenseMapper mapper;
 
     @Before
@@ -49,7 +45,6 @@ public class RecurringExpenseServiceTest {
                 recurringExpenseRepository,
                 categoryRepositoryInterface,
                 paymentTypeRepositoryInterface,
-                userRepositoryInterface,
                 mapper);
     }
 
@@ -69,7 +64,6 @@ public class RecurringExpenseServiceTest {
         RecurringExpense output = RecurringExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
         when(mapper.dtoToEntity(request)).thenReturn(output);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.insert(request);
@@ -94,7 +88,6 @@ public class RecurringExpenseServiceTest {
         RecurringExpense output = RecurringExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
         when(mapper.dtoToEntity(request)).thenReturn(output);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.insert(request);
@@ -119,7 +112,6 @@ public class RecurringExpenseServiceTest {
         RecurringExpense output = RecurringExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.insert(request);
 
@@ -144,7 +136,6 @@ public class RecurringExpenseServiceTest {
         RecurringExpense output = RecurringExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists(null)).thenReturn(false);
         when(paymentTypeRepositoryInterface.paymentTypeExists(null)).thenReturn(false);
-        when(userRepositoryInterface.userExists(null)).thenReturn(false);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.insert(request);
 
@@ -168,7 +159,6 @@ public class RecurringExpenseServiceTest {
         RecurringExpense output = RecurringExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(false);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(false);
-        when(userRepositoryInterface.userExists("1")).thenReturn(false);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.insert(request);
 
@@ -195,7 +185,6 @@ public class RecurringExpenseServiceTest {
         when(recurringExpenseRepository.recurringExpenseExists("1")).thenReturn(true);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
         when(mapper.dtoToEntity(request)).thenReturn(output);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.update(request);
@@ -221,7 +210,6 @@ public class RecurringExpenseServiceTest {
         when(recurringExpenseRepository.recurringExpenseExists("1")).thenReturn(true);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
         when(mapper.dtoToEntity(request)).thenReturn(output);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.update(request);
@@ -247,7 +235,6 @@ public class RecurringExpenseServiceTest {
         when(recurringExpenseRepository.recurringExpenseExists("1")).thenReturn(true);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.update(request);
 
@@ -272,7 +259,6 @@ public class RecurringExpenseServiceTest {
         RecurringExpense output = RecurringExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists(null)).thenReturn(false);
         when(paymentTypeRepositoryInterface.paymentTypeExists(null)).thenReturn(false);
-        when(userRepositoryInterface.userExists(null)).thenReturn(false);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.update(request);
 
@@ -296,7 +282,6 @@ public class RecurringExpenseServiceTest {
         RecurringExpense output = RecurringExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.update(request);
 
@@ -322,7 +307,6 @@ public class RecurringExpenseServiceTest {
         when(recurringExpenseRepository.recurringExpenseExists("1")).thenReturn(true);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
-        when(userRepositoryInterface.userExists("1")).thenReturn(true);
         when(mapper.dtoToEntity(request)).thenReturn(output);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.update(request);
@@ -348,7 +332,6 @@ public class RecurringExpenseServiceTest {
         when(recurringExpenseRepository.recurringExpenseExists("1")).thenReturn(false);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(false);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(false);
-        when(userRepositoryInterface.userExists("1")).thenReturn(false);
 
         ServiceResponse<RecurringExpenseDto> response = this.classUnderTest.update(request);
 

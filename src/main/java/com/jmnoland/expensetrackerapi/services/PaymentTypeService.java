@@ -1,7 +1,6 @@
 package com.jmnoland.expensetrackerapi.services;
 
 import com.jmnoland.expensetrackerapi.interfaces.repositories.PaymentTypeRepositoryInterface;
-import com.jmnoland.expensetrackerapi.interfaces.repositories.UserRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.PaymentTypeServiceInterface;
 import com.jmnoland.expensetrackerapi.mapping.PaymentTypeMapper;
 import com.jmnoland.expensetrackerapi.models.dtos.PaymentTypeDto;
@@ -18,28 +17,24 @@ import java.util.List;
 @Service
 public class PaymentTypeService implements PaymentTypeServiceInterface {
     private final PaymentTypeRepositoryInterface paymentTypeRepository;
-    private final UserRepositoryInterface userRepositoryInterface;
     private final PaymentTypeMapper mapper;
     @Autowired
     public PaymentTypeService(PaymentTypeRepositoryInterface paymentTypeRepository,
-                              UserRepositoryInterface userRepositoryInterface,
                               PaymentTypeMapper paymentTypeMapper) {
         this.paymentTypeRepository = paymentTypeRepository;
-        this.userRepositoryInterface = userRepositoryInterface;
         this.mapper = paymentTypeMapper;
     }
 
-    public List<PaymentTypeDto> getPaymentTypes(String userId) {
-        List<PaymentType> paymentTypes = this.paymentTypeRepository.getPaymentTypes(userId);
+    public List<PaymentTypeDto> getPaymentTypes(String clientId) {
+        List<PaymentType> paymentTypes = this.paymentTypeRepository.getPaymentTypes(clientId);
         return this.mapper.entityToDto(paymentTypes);
     }
 
     public ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType) {
         boolean paymentTypeExists = this.paymentTypeRepository.paymentTypeExistsId(paymentType.paymentTypeId);
-        boolean userExists = this.userRepositoryInterface.userExists(paymentType.userId);
 
         List<ValidationError> validationErrors = new CreatePaymentTypeValidator()
-                .validate(paymentType, paymentTypeExists, userExists);
+                .validate(paymentType, paymentTypeExists);
 
         PaymentType newPaymentType = null;
         if (validationErrors.isEmpty()) {
@@ -65,10 +60,9 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
 
     public ServiceResponse<PaymentTypeDto> update(PaymentTypeDto paymentType) {
         boolean paymentTypeExists = this.paymentTypeRepository.paymentTypeExists(paymentType.paymentTypeId);
-        boolean userExists = this.userRepositoryInterface.userExists(paymentType.userId);
 
         List<ValidationError> validationErrors = new UpdatePaymentTypeValidator()
-                .validate(paymentType, paymentTypeExists, userExists);
+                .validate(paymentType, paymentTypeExists);
 
         PaymentType updatedPaymentType = null;
         if (validationErrors.isEmpty()) {

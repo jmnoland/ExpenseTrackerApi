@@ -18,8 +18,8 @@ public class CategoryRepository implements CategoryRepositoryInterface {
         this.categoryDAO = categoryDAO;
     }
 
-    public List<Category> getAllCategoriesByUserId(String userId) {
-        return this.categoryDAO.findCategoriesByUserId(userId);
+    public List<Category> getAllCategoriesByClientId(String clientId) {
+        return this.categoryDAO.findCategoriesByClientId(clientId);
     }
 
     public boolean categoryExists(String categoryId) {

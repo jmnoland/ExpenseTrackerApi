@@ -1,12 +1,11 @@
 package com.jmnoland.expensetrackerapi.services;
 
 import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
+import com.jmnoland.expensetrackerapi.interfaces.repositories.ApiKeyRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.ExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.RecurringExpenseServiceInterface;
-import com.jmnoland.expensetrackerapi.interfaces.services.UserServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.ExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
-import com.jmnoland.expensetrackerapi.models.dtos.UserDto;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -18,26 +17,26 @@ import java.util.List;
 @Service
 public class SchedulerService {
 
-    private final UserServiceInterface userService;
     private final RecurringExpenseServiceInterface recurringExpenseService;
     private final ExpenseServiceInterface expenseService;
+    private final ApiKeyRepositoryInterface apiKeyRepository;
     private final DateProviderInterface dateProvider;
 
     public SchedulerService(RecurringExpenseServiceInterface recurringExpenseService,
-                            UserServiceInterface userService,
                             ExpenseServiceInterface expenseService,
+                            ApiKeyRepositoryInterface apiKeyRepository,
                             DateProviderInterface dateProvider) {
         this.recurringExpenseService = recurringExpenseService;
         this.expenseService = expenseService;
-        this.userService = userService;
+        this.apiKeyRepository = apiKeyRepository;
         this.dateProvider = dateProvider;
     }
     @Scheduled(cron = "0 12 * * * *")
     public void scheduleTask()
     {
-        List<UserDto> userList = this.userService.getUsers();
-        for(UserDto user : userList) {
-            List<RecurringExpenseDto> recurExpenseList = this.recurringExpenseService.getRecurringExpenses(user.userId);
+        List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
+        for(String id : clientIdList) {
+            List<RecurringExpenseDto> recurExpenseList = this.recurringExpenseService.getRecurringExpenses(id);
             List<ExpenseDto> expenseDtos = CreatePendingExpenses(recurExpenseList);
             for(ExpenseDto expenseDto : expenseDtos) {
                 this.expenseService.insert(expenseDto);
@@ -65,7 +64,7 @@ public class SchedulerService {
                 recurringExpense.lastExpenseDate = currentTime.getTime();
                 return new ExpenseDto(
                         null,
-                        recurringExpense.userId,
+                        recurringExpense.clientId,
                         recurringExpense.categoryId,
                         recurringExpense.paymentTypeId,
                         recurringExpense.name,
@@ -103,7 +102,7 @@ public class SchedulerService {
                     recurringExpense.lastExpenseDate = lastExpense.getTime();
                     return new ExpenseDto(
                             null,
-                            recurringExpense.userId,
+                            recurringExpense.clientId,
                             recurringExpense.categoryId,
                             recurringExpense.paymentTypeId,
                             recurringExpense.name,

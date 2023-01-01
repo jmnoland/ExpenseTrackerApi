@@ -46,7 +46,7 @@ public class CategoryServiceTest {
         existing.add(new Category("1", "1", "test", new Date(1)));
         CategoryDto request = new CategoryDto("1", "1", "test", null);
         Category outputCategory = CategoryMapper.INSTANCE.dtoToEntity(request);
-        when(categoryRepositoryInterface.getAllCategoriesByUserId(request.userId)).thenReturn(existing);
+        when(categoryRepositoryInterface.getAllCategoriesByClientId(request.clientId)).thenReturn(existing);
 
         ServiceResponse<CategoryDto> response = classUnderTest.insert(request);
 
@@ -60,7 +60,7 @@ public class CategoryServiceTest {
         List<Category> existing = new ArrayList<>();
         CategoryDto request = new CategoryDto("1", "1", null, null);
         Category outputCategory = CategoryMapper.INSTANCE.dtoToEntity(request);
-        when(categoryRepositoryInterface.getAllCategoriesByUserId(request.userId)).thenReturn(existing);
+        when(categoryRepositoryInterface.getAllCategoriesByClientId(request.clientId)).thenReturn(existing);
 
         ServiceResponse<CategoryDto> response = classUnderTest.insert(request);
 
@@ -75,7 +75,7 @@ public class CategoryServiceTest {
         CategoryDto request = new CategoryDto("1", "1", "test", null);
         Category outputCategory = CategoryMapper.INSTANCE.dtoToEntity(request);
         when(categoryMapper.dtoToEntity(request)).thenReturn(outputCategory);
-        when(categoryRepositoryInterface.getAllCategoriesByUserId(request.userId)).thenReturn(existing);
+        when(categoryRepositoryInterface.getAllCategoriesByClientId(request.clientId)).thenReturn(existing);
 
         ServiceResponse<CategoryDto> response = classUnderTest.insert(request);
 
@@ -92,7 +92,7 @@ public class CategoryServiceTest {
         existing.add(new Category("1", "1", "test", new Date(1)));
         CategoryDto request = new CategoryDto("1", "1", "test", null);
         Category outputCategory = CategoryMapper.INSTANCE.dtoToEntity(request);
-        when(categoryRepositoryInterface.getAllCategoriesByUserId(request.userId)).thenReturn(existing);
+        when(categoryRepositoryInterface.getAllCategoriesByClientId(request.clientId)).thenReturn(existing);
 
         ServiceResponse<CategoryDto> response = classUnderTest.update(request);
 
@@ -107,7 +107,7 @@ public class CategoryServiceTest {
         existing.add(new Category("1", "1", "test", new Date(1)));
         CategoryDto request = new CategoryDto("1", "1", null, null);
         Category outputCategory = CategoryMapper.INSTANCE.dtoToEntity(request);
-        when(categoryRepositoryInterface.getAllCategoriesByUserId(request.userId)).thenReturn(existing);
+        when(categoryRepositoryInterface.getAllCategoriesByClientId(request.clientId)).thenReturn(existing);
 
         ServiceResponse<CategoryDto> response = classUnderTest.update(request);
 
@@ -123,7 +123,7 @@ public class CategoryServiceTest {
         CategoryDto request = new CategoryDto("1", "1", "test2", null);
         Category outputCategory = CategoryMapper.INSTANCE.dtoToEntity(request);
         when(categoryMapper.dtoToEntity(request)).thenReturn(outputCategory);
-        when(categoryRepositoryInterface.getAllCategoriesByUserId(request.userId)).thenReturn(existing);
+        when(categoryRepositoryInterface.getAllCategoriesByClientId(request.clientId)).thenReturn(existing);
 
         ServiceResponse<CategoryDto> response = classUnderTest.update(request);
 
@@ -137,7 +137,7 @@ public class CategoryServiceTest {
         List<Category> existing = new ArrayList<>();
         CategoryDto request = new CategoryDto("1", "1", "test", null);
         Category outputCategory = CategoryMapper.INSTANCE.dtoToEntity(request);
-        when(categoryRepositoryInterface.getAllCategoriesByUserId(request.userId)).thenReturn(existing);
+        when(categoryRepositoryInterface.getAllCategoriesByClientId(request.clientId)).thenReturn(existing);
 
         ServiceResponse<CategoryDto> response = classUnderTest.update(request);
 

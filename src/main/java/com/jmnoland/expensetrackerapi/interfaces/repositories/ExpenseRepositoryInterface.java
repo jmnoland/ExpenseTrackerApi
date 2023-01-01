@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ExpenseRepositoryInterface {
 
-    List<Expense> getExpenses(String userId);
+    List<Expense> getExpenses(String clientId);
 
     boolean expenseExists(String expenseId);
 

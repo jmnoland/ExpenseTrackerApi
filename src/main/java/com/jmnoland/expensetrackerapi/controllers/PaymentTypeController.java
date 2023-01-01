@@ -20,8 +20,8 @@ public class PaymentTypeController {
     }
 
     @GetMapping()
-    public List<PaymentTypeDto> getPaymentTypes(String userId) {
-        return this.paymentTypeService.getPaymentTypes(userId);
+    public List<PaymentTypeDto> getPaymentTypes(String clientId) {
+        return this.paymentTypeService.getPaymentTypes(clientId);
     }
 
     @PostMapping()

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RecurringExpenseRepositoryInterface {
 
-    List<RecurringExpense> getRecurringExpenses(String userId);
+    List<RecurringExpense> getRecurringExpenses(String clientId);
 
     boolean recurringExpenseExists(String recurringExpenseId);
 

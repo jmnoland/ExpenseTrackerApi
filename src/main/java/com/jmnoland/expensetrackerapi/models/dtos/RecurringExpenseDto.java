@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class RecurringExpenseDto {
     public String recurringExpenseId;
-    public String userId;
+    public String clientId;
     public String categoryId;
     public String paymentTypeId;
     public String name;
@@ -21,7 +21,7 @@ public class RecurringExpenseDto {
 
     public RecurringExpenseDto(
             String recurringExpenseId,
-            String userId,
+            String clientId,
             String categoryId,
             String paymentTypeId,
             String name,
@@ -32,7 +32,7 @@ public class RecurringExpenseDto {
             @Nullable Date lastExpenseDate
     ) {
         this.recurringExpenseId = recurringExpenseId;
-        this.userId = userId;
+        this.clientId = clientId;
         this.categoryId = categoryId;
         this.paymentTypeId = paymentTypeId;
         this.name = name;

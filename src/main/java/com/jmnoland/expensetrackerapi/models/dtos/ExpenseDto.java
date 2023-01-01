@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ExpenseDto {
     public String expenseId;
-    public String userId;
+    public String clientId;
     public String categoryId;
     public String paymentTypeId;
     public String name;
@@ -14,7 +14,7 @@ public class ExpenseDto {
 
     public ExpenseDto(
             String expenseId,
-            String userId,
+            String clientId,
             String categoryId,
             String paymentTypeId,
             String name,
@@ -23,7 +23,7 @@ public class ExpenseDto {
             String recurringExpenseId
     ) {
         this.expenseId = expenseId;
-        this.userId = userId;
+        this.clientId = clientId;
         this.categoryId = categoryId;
         this.paymentTypeId = paymentTypeId;
         this.name = name;

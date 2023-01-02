@@ -25,7 +25,7 @@ public class ApiKeyRepository implements ApiKeyRepositoryInterface {
 
         List<String> clientIds = new ArrayList<>();
         for(ApiKey apikey : keys) {
-            clientIds.add(apikey.getId());
+            clientIds.add(apikey.getClientId());
         }
 
         return clientIds;

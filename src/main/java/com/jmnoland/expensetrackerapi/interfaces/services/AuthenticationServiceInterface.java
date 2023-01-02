@@ -1,5 +1,8 @@
 package com.jmnoland.expensetrackerapi.interfaces.services;
 
-public interface AuthenticationServiceInterface {
+import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
+import com.jmnoland.expensetrackerapi.models.responses.ApiKeyResponse;
 
+public interface AuthenticationServiceInterface {
+    ServiceResponse<ApiKeyResponse> createClientApiKey();
 }

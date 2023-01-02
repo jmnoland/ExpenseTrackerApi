@@ -7,14 +7,16 @@ import java.util.Date;
 @Document("apikeys")
 public class ApiKey {
 
-    private final String Id;
-    private final String KeyHash;
+    private String Id;
+    private String ClientId;
+    private String KeyHash;
     private boolean Active;
-    private final Date CreatedAt;
-    private final Date RevokedAt;
+    private Date CreatedAt;
+    private Date RevokedAt;
 
-    public ApiKey(String id, String keyHash, boolean active, Date createdAt, Date revokedAt) {
+    public ApiKey(String id, String clientId, String keyHash, boolean active, Date createdAt, Date revokedAt) {
         this.Id = id;
+        this.ClientId = clientId;
         this.KeyHash = keyHash;
         this.Active = active;
         this.CreatedAt = createdAt;
@@ -43,5 +45,9 @@ public class ApiKey {
 
     public Date getRevokedAt() {
         return RevokedAt;
+    }
+
+    public String getClientId() {
+        return ClientId;
     }
 }

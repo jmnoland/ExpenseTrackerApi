@@ -1,5 +1,6 @@
 package com.jmnoland.expensetrackerapi.models.entities;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -7,47 +8,51 @@ import java.util.Date;
 @Document("apikeys")
 public class ApiKey {
 
-    private String Id;
-    private String ClientId;
-    private String KeyHash;
-    private boolean Active;
-    private Date CreatedAt;
-    private Date RevokedAt;
+    @Id
+    private final String id;
+    private String keyId;
+    private String clientId;
+    private String keyHash;
+    private boolean active;
+    private Date createdAt;
+    private Date revokedAt;
 
-    public ApiKey(String id, String clientId, String keyHash, boolean active, Date createdAt, Date revokedAt) {
-        this.Id = id;
-        this.ClientId = clientId;
-        this.KeyHash = keyHash;
-        this.Active = active;
-        this.CreatedAt = createdAt;
-        this.RevokedAt = revokedAt;
+    public ApiKey(String id, String keyId, String clientId, String keyHash, boolean active, Date createdAt, Date revokedAt) {
+        this.id = id;
+        this.keyId = keyId;
+        this.clientId = clientId;
+        this.keyHash = keyHash;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.revokedAt = revokedAt;
     }
 
-    public String getId() {
-        return Id;
+    public String getKeyId() {
+        return keyId;
     }
+    public void setKeyId(String keyId) { this.keyId = keyId; }
 
     public String getKeyHash() {
-        return KeyHash;
+        return keyHash;
     }
 
     public boolean isActive() {
-        return Active;
+        return active;
     }
 
     public void setActive(boolean active) {
-        Active = active;
+        this.active = active;
     }
 
     public Date getCreatedAt() {
-        return CreatedAt;
+        return createdAt;
     }
 
     public Date getRevokedAt() {
-        return RevokedAt;
+        return revokedAt;
     }
 
     public String getClientId() {
-        return ClientId;
+        return clientId;
     }
 }

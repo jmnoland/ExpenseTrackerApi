@@ -3,67 +3,67 @@ package com.jmnoland.expensetrackerapi.models.dtos;
 import java.util.Date;
 
 public class ApiKeyDto {
-    private String Id;
-    private String ClientId;
-    private String KeyHash;
-    private boolean Active;
-    private Date CreatedAt;
-    private Date RevokedAt;
+    private String keyId;
+    private String clientId;
+    private String keyHash;
+    private boolean active;
+    private Date createdAt;
+    private Date revokedAt;
 
-    public ApiKeyDto(String id, String clientId, String keyHash, boolean active, Date createdAt, Date revokedAt) {
-        this.Id = id;
-        this.ClientId = clientId;
-        this.KeyHash = keyHash;
-        this.Active = active;
-        this.CreatedAt = createdAt;
-        this.RevokedAt = revokedAt;
+    public ApiKeyDto(String keyId, String clientId, String keyHash, boolean active, Date createdAt, Date revokedAt) {
+        this.keyId = keyId;
+        this.clientId = clientId;
+        this.keyHash = keyHash;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.revokedAt = revokedAt;
     }
 
-    public String getId() {
-        return Id;
+    public String getKeyId() {
+        return keyId;
     }
 
-    public void setId(String id) {
-        Id = id;
+    public void setKeyId(String keyId) {
+        this.keyId = keyId;
     }
 
     public String getClientId() {
-        return ClientId;
+        return clientId;
     }
 
     public void setClientId(String clientId) {
-        ClientId = clientId;
+        this.clientId = clientId;
     }
 
     public String getKeyHash() {
-        return KeyHash;
+        return keyHash;
     }
 
     public void setKeyHash(String keyHash) {
-        KeyHash = keyHash;
+        this.keyHash = keyHash;
     }
 
     public boolean isActive() {
-        return Active;
+        return active;
     }
 
     public void setActive(boolean active) {
-        Active = active;
+        this.active = active;
     }
 
     public Date getCreatedAt() {
-        return CreatedAt;
+        return createdAt;
     }
 
     public void setCreatedAt(Date createdAt) {
-        CreatedAt = createdAt;
+        this.createdAt = createdAt;
     }
 
     public Date getRevokedAt() {
-        return RevokedAt;
+        return revokedAt;
     }
 
     public void setRevokedAt(Date revokedAt) {
-        RevokedAt = revokedAt;
+        this.revokedAt = revokedAt;
     }
 }

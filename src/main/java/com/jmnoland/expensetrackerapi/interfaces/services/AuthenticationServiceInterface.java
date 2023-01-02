@@ -5,4 +5,5 @@ import com.jmnoland.expensetrackerapi.models.responses.ApiKeyResponse;
 
 public interface AuthenticationServiceInterface {
     ServiceResponse<ApiKeyResponse> createClientApiKey();
+    boolean validateApiKey(String apiKeyHeader);
 }

@@ -19,7 +19,9 @@ public class ApiKeyRepository implements ApiKeyRepositoryInterface {
     }
 
     public ApiKey getApiKeyByHash(String keyHash) { return this.apiKeyDAO.findApiKeyByHash(keyHash); }
-    public ApiKey findApiKeyByClientId(String clientId) { return this.apiKeyDAO.findApiKeyByClientId(clientId); }
+    public ApiKey findApiKeyById(String id) {
+        return this.apiKeyDAO.findApiKeyById(id);
+    }
     public List<String> getAllClientIds() {
         List<ApiKey> keys = this.apiKeyDAO.findAll();
 

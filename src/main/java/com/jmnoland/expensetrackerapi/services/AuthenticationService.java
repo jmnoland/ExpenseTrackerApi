@@ -6,7 +6,9 @@ import com.jmnoland.expensetrackerapi.interfaces.services.AuthenticationServiceI
 import com.jmnoland.expensetrackerapi.mapping.ApiKeyMapper;
 import com.jmnoland.expensetrackerapi.models.dtos.ApiKeyDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
+import com.jmnoland.expensetrackerapi.models.dtos.ValidateApiKeyDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ValidationError;
+import com.jmnoland.expensetrackerapi.models.entities.ApiKey;
 import com.jmnoland.expensetrackerapi.models.responses.ApiKeyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,17 @@ public class AuthenticationService implements AuthenticationServiceInterface {
         this.apiKeyRepository = apiKeyRepository;
         this.dateProvider = dateProvider;
         this.mapper = mapper;
+    }
+
+    private static ValidateApiKeyDto decodeAuthHeader(String header) {
+        byte[] decoded = Base64.getDecoder().decode(header);
+        String apiKeyString = new String(decoded, StandardCharsets.UTF_8);
+
+        List<String> keyParts = new ArrayList<>();
+        keyParts.add(apiKeyString.substring(0, apiKeyString.indexOf(":")));
+        keyParts.add(apiKeyString.substring(apiKeyString.indexOf(":") + 1));
+
+        return new ValidateApiKeyDto(keyParts.get(0), keyParts.get(1));
     }
 
     private static String generateApiKey(int keyLen) {
@@ -70,7 +83,22 @@ public class AuthenticationService implements AuthenticationServiceInterface {
 
         this.apiKeyRepository.insert(this.mapper.dtoToEntity(newKey));
 
-        ApiKeyResponse response = new ApiKeyResponse(newKey.getId(), secret, newKey.getClientId());
+        ApiKeyResponse response = new ApiKeyResponse(newKey.getKeyId(), secret, newKey.getClientId());
         return new ServiceResponse<>(response, true, null);
+    }
+
+    public boolean validateApiKey(String apiKeyHeader) {
+        ValidateApiKeyDto apiKey = decodeAuthHeader(apiKeyHeader);
+
+        ApiKey key = this.apiKeyRepository.findApiKeyById(apiKey.KeyId);
+
+        String hash;
+        try {
+            hash = hashSecret(apiKey.Secret);
+        } catch (NoSuchAlgorithmException e) {
+            return false;
+        }
+
+        return key != null && Objects.equals(key.getKeyHash(), hash);
     }
 }

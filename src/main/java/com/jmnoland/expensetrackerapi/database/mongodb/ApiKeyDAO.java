@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 public interface ApiKeyDAO extends MongoRepository<ApiKey, String> {
-    @Query("{'clientId' : ?0}")
-    ApiKey findApiKeyByClientId(String clientId);
+    @Query("{'KeyId' : ?0}")
+    ApiKey findApiKeyById(String keyId);
     @Query("{'keyHash' : ?0}")
     ApiKey findApiKeyByHash(String keyHash);
 }

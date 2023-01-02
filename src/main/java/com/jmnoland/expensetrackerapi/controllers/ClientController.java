@@ -16,7 +16,8 @@ public class ClientController {
         this.authenticationService = authenticationServiceInterface;
     }
 
-    @PostMapping()
+    @PostMapping("create")
+    @ResponseBody
     public ServiceResponse<ApiKeyResponse> createClientApiKey() {
         return this.authenticationService.createClientApiKey();
     }

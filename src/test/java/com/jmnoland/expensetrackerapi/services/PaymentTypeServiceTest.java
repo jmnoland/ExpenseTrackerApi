@@ -88,19 +88,6 @@ public class PaymentTypeServiceTest {
         assertEquals(1, response.validationErrors.size());
         verify(paymentTypeRepositoryInterface, never()).insert(output);
     }
-    @Test
-    public void InsertPaymentType_ShouldNotBeSuccessful_WhenUserDoesNotExist() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
-        PaymentType output = this.mapper.dtoToEntity(request);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(false);
-
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
-
-        assertFalse(response.successful);
-        assertNotNull(response.validationErrors);
-        assertEquals(1, response.validationErrors.size());
-        verify(paymentTypeRepositoryInterface, never()).insert(output);
-    }
 
     // update tests
     @Test
@@ -135,19 +122,6 @@ public class PaymentTypeServiceTest {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(false);
-
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
-
-        assertFalse(response.successful);
-        assertNotNull(response.validationErrors);
-        assertEquals(1, response.validationErrors.size());
-        verify(paymentTypeRepositoryInterface, never()).update(output);
-    }
-    @Test
-    public void UpdatePaymentType_ShouldNotBeSuccessful_WhenUserDoesNotExist() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
-        PaymentType output = this.mapper.dtoToEntity(request);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 

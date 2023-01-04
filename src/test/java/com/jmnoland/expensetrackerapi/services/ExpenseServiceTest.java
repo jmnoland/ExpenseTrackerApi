@@ -59,7 +59,7 @@ public class ExpenseServiceTest {
                 null);
         Expense output = ExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId("1")).thenReturn(true);
         when(mapper.dtoToEntity(request)).thenReturn(output);
 
         ServiceResponse<ExpenseDto> response = this.classUnderTest.insert(request);
@@ -81,13 +81,13 @@ public class ExpenseServiceTest {
                 null);
         Expense output = ExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists(null)).thenReturn(false);
-        when(paymentTypeRepositoryInterface.paymentTypeExists(null)).thenReturn(false);
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId(null)).thenReturn(false);
 
         ServiceResponse<ExpenseDto> response = this.classUnderTest.insert(request);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
-        assertEquals(9, response.validationErrors.size());
+        assertEquals(8, response.validationErrors.size());
         verify(expenseRepository, never()).insert(output);
     }
     @Test
@@ -102,13 +102,13 @@ public class ExpenseServiceTest {
                 null);
         Expense output = ExpenseMapper.INSTANCE.dtoToEntity(request);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(false);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(false);
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId("1")).thenReturn(false);
 
         ServiceResponse<ExpenseDto> response = this.classUnderTest.insert(request);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
-        assertEquals(3, response.validationErrors.size());
+        assertEquals(2, response.validationErrors.size());
         verify(expenseRepository, never()).insert(output);
     }
 
@@ -126,7 +126,7 @@ public class ExpenseServiceTest {
         Expense output = ExpenseMapper.INSTANCE.dtoToEntity(request);
         when(expenseRepository.expenseExists("1")).thenReturn(true);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId("1")).thenReturn(true);
         when(mapper.dtoToEntity(request)).thenReturn(output);
 
         ServiceResponse<ExpenseDto> response = this.classUnderTest.update(request);
@@ -149,13 +149,13 @@ public class ExpenseServiceTest {
         Expense output = ExpenseMapper.INSTANCE.dtoToEntity(request);
         when(expenseRepository.expenseExists("1")).thenReturn(true);
         when(categoryRepositoryInterface.categoryExists(null)).thenReturn(false);
-        when(paymentTypeRepositoryInterface.paymentTypeExists(null)).thenReturn(false);
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId(null)).thenReturn(false);
 
         ServiceResponse<ExpenseDto> response = this.classUnderTest.update(request);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
-        assertEquals(9, response.validationErrors.size());
+        assertEquals(8, response.validationErrors.size());
         verify(expenseRepository, never()).update(output);
     }
     @Test
@@ -171,7 +171,7 @@ public class ExpenseServiceTest {
         Expense output = ExpenseMapper.INSTANCE.dtoToEntity(request);
         when(expenseRepository.expenseExists("1")).thenReturn(false);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId("1")).thenReturn(true);
 
         ServiceResponse<ExpenseDto> response = this.classUnderTest.update(request);
 
@@ -194,7 +194,7 @@ public class ExpenseServiceTest {
         Expense output = ExpenseMapper.INSTANCE.dtoToEntity(request);
         when(expenseRepository.expenseExists("1")).thenReturn(true);
         when(categoryRepositoryInterface.categoryExists("1")).thenReturn(true);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId("1")).thenReturn(true);
         when(mapper.dtoToEntity(request)).thenReturn(output);
 
         ServiceResponse<ExpenseDto> response = this.classUnderTest.update(request);

@@ -75,7 +75,7 @@ public class ExpenseService implements ExpenseServiceInterface {
     public ServiceResponse<ExpenseDto> update(ExpenseDto expense) {
         boolean expenseExists = this.expenseRepository.expenseExists(expense.expenseId);
         boolean categoryExists = this.categoryRepositoryInterface.categoryExists(expense.categoryId);
-        boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExists(expense.paymentTypeId);
+        boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExistsId(expense.paymentTypeId);
 
         List<ValidationError> validationErrors = new UpdateExpenseValidator()
                 .validate(expense, expenseExists, categoryExists, paymentTypeExists);

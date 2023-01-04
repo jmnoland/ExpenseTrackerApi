@@ -1,5 +1,6 @@
 package com.jmnoland.expensetrackerapi.services;
 
+import com.jmnoland.expensetrackerapi.helpers.ApiKeyHelper;
 import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.ApiKeyRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.AuthenticationServiceInterface;
@@ -13,12 +14,7 @@ import com.jmnoland.expensetrackerapi.models.responses.ApiKeyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.DatatypeConverter;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.*;
 
 @Service
@@ -37,38 +33,16 @@ public class AuthenticationService implements AuthenticationServiceInterface {
         this.mapper = mapper;
     }
 
-    private static ValidateApiKeyDto decodeAuthHeader(String header) {
-        byte[] decoded = Base64.getDecoder().decode(header);
-        String apiKeyString = new String(decoded, StandardCharsets.UTF_8);
-
-        List<String> keyParts = new ArrayList<>();
-        keyParts.add(apiKeyString.substring(0, apiKeyString.indexOf(":")));
-        keyParts.add(apiKeyString.substring(apiKeyString.indexOf(":") + 1));
-
-        return new ValidateApiKeyDto(keyParts.get(0), keyParts.get(1));
-    }
-
-    private static String generateApiKey(int keyLen) {
-        SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[keyLen/8];
-        random.nextBytes(bytes);
-        return DatatypeConverter.printHexBinary(bytes);
-    }
-
-    private static String hashSecret(String secret) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(secret.getBytes(StandardCharsets.UTF_8));
-
-        BigInteger number = new BigInteger(1, hash);
-        return number.toString(16);
-    }
-
     public ServiceResponse<ApiKeyResponse> createClientApiKey() {
-        String secret = generateApiKey(256);
+        return createClientApiKey(null);
+    }
+
+    public ServiceResponse<ApiKeyResponse> createClientApiKey(String clientId) {
+        String secret = ApiKeyHelper.generateApiKey(256);
         String hash;
 
         try {
-            hash = hashSecret(secret);
+            hash = ApiKeyHelper.hashSecret(secret);
         } catch (NoSuchAlgorithmException e) {
             List<ValidationError> validationErrorList = new ArrayList<>();
             validationErrorList.add(new ValidationError("Hash", "Failed to create api key"));
@@ -76,7 +50,8 @@ public class AuthenticationService implements AuthenticationServiceInterface {
         }
 
         String id = UUID.randomUUID().toString();
-        String clientId = UUID.randomUUID().toString();
+        if (clientId == null)
+            clientId = UUID.randomUUID().toString();
 
         Date dateNow = this.dateProvider.getDateNow().getTime();
         ApiKeyDto newKey = new ApiKeyDto(id, clientId, hash, true, dateNow, null);
@@ -87,14 +62,27 @@ public class AuthenticationService implements AuthenticationServiceInterface {
         return new ServiceResponse<>(response, true, null);
     }
 
+    public ServiceResponse<ApiKeyResponse> createNewClientApiKey(String apiKeyHeader) {
+        ValidateApiKeyDto apiKey = ApiKeyHelper.decodeAuthHeader(apiKeyHeader);
+
+        ApiKey key = this.apiKeyRepository.findApiKeyById(apiKey.KeyId);
+        key.setActive(false);
+        key.setRevokedAt(this.dateProvider.getDateNow().getTime());
+
+        ServiceResponse<ApiKeyResponse> response = createClientApiKey(key.getClientId());
+        this.apiKeyRepository.update(key);
+
+        return response;
+    }
+
     public boolean validateApiKey(String apiKeyHeader) {
-        ValidateApiKeyDto apiKey = decodeAuthHeader(apiKeyHeader);
+        ValidateApiKeyDto apiKey = ApiKeyHelper.decodeAuthHeader(apiKeyHeader);
 
         ApiKey key = this.apiKeyRepository.findApiKeyById(apiKey.KeyId);
 
         String hash;
         try {
-            hash = hashSecret(apiKey.Secret);
+            hash = ApiKeyHelper.hashSecret(apiKey.Secret);
         } catch (NoSuchAlgorithmException e) {
             return false;
         }

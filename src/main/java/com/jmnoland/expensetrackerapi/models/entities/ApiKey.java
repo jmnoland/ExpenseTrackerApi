@@ -10,11 +10,11 @@ public class ApiKey {
 
     @Id
     private final String id;
-    private String keyId;
-    private String clientId;
-    private String keyHash;
+    private final String keyId;
+    private final String clientId;
+    private final String keyHash;
     private boolean active;
-    private Date createdAt;
+    private final Date createdAt;
     private Date revokedAt;
 
     public ApiKey(String id, String keyId, String clientId, String keyHash, boolean active, Date createdAt, Date revokedAt) {
@@ -30,7 +30,6 @@ public class ApiKey {
     public String getKeyId() {
         return keyId;
     }
-    public void setKeyId(String keyId) { this.keyId = keyId; }
 
     public String getKeyHash() {
         return keyHash;
@@ -50,6 +49,10 @@ public class ApiKey {
 
     public Date getRevokedAt() {
         return revokedAt;
+    }
+
+    public void setRevokedAt(Date revokedAt) {
+        this.revokedAt = revokedAt;
     }
 
     public String getClientId() {

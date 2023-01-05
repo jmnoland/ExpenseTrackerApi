@@ -35,6 +35,7 @@ public class ApiKeyHelper {
     }
 
     public static String generateApiKey(int keyLen) {
+        if (keyLen < 8) keyLen = 8;
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[keyLen/8];
         random.nextBytes(bytes);

@@ -20,13 +20,18 @@ public class PaymentTypeController {
     }
 
     @GetMapping()
-    public List<PaymentTypeDto> getPaymentTypes(String clientId) {
+    public ServiceResponse<List<PaymentTypeDto>> getPaymentTypes(String clientId) {
         return this.paymentTypeService.getPaymentTypes(clientId);
     }
 
     @PostMapping()
     public ServiceResponse<PaymentTypeDto> createPaymentType(@RequestBody PaymentTypeDto paymentType) {
         return this.paymentTypeService.insert(paymentType);
+    }
+
+    @PostMapping("archive")
+    public ServiceResponse<String> archivePaymentType(String paymentTypeId) {
+        return this.paymentTypeService.archivePaymentType(paymentTypeId);
     }
 
     @PatchMapping()

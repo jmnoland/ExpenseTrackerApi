@@ -3,6 +3,7 @@ package com.jmnoland.expensetrackerapi.models.dtos;
 import java.util.Date;
 
 public class PaymentTypeDto {
+
     public String paymentTypeId;
     public String clientId;
     public boolean active;

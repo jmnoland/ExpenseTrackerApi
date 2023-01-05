@@ -20,7 +20,7 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public List<CategoryDto> getCategories(String clientId) {
+    public ServiceResponse<List<CategoryDto>> getCategories(String clientId) {
         return this.categoryService.getAllCategories(clientId);
     }
 

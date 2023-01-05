@@ -36,9 +36,11 @@ public class ExpenseService implements ExpenseServiceInterface {
         this.mapper = expenseMapper;
     }
 
-    public List<ExpenseDto> getExpenses(String clientId) {
+    public ServiceResponse<List<ExpenseDto>> getExpenses(String clientId) {
         List<Expense> existingExpenses = this.expenseRepository.getExpenses(clientId);
-        return this.mapper.entityToDto(existingExpenses);
+        List<ExpenseDto> list = this.mapper.entityToDto(existingExpenses);
+
+        return new ServiceResponse<>(list, true, null);
     }
 
     public ServiceResponse<ExpenseDto> insert(ExpenseDto expense) {

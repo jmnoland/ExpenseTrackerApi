@@ -1,21 +1,26 @@
 package com.jmnoland.expensetrackerapi.repositories;
 
 import com.jmnoland.expensetrackerapi.database.mongodb.PaymentTypeDAO;
+import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.PaymentTypeRepositoryInterface;
 import com.jmnoland.expensetrackerapi.models.entities.PaymentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PaymentTypeRepository implements PaymentTypeRepositoryInterface {
 
     private final PaymentTypeDAO paymentTypeDAO;
+    private final DateProviderInterface dateProvider;
 
     @Autowired
-    public PaymentTypeRepository(PaymentTypeDAO paymentTypeDAO) {
+    public PaymentTypeRepository(PaymentTypeDAO paymentTypeDAO,
+                                 DateProviderInterface dateProvider) {
         this.paymentTypeDAO = paymentTypeDAO;
+        this.dateProvider = dateProvider;
     }
 
     public List<PaymentType> getPaymentTypes(String clientId) {
@@ -28,6 +33,17 @@ public class PaymentTypeRepository implements PaymentTypeRepositoryInterface {
 
     public boolean paymentTypeExists(String paymentTypeName) {
         return this.paymentTypeDAO.paymentTypeExistsByName(paymentTypeName);
+    }
+
+    public void archivePaymentType(String paymentTypeId) {
+        Optional<PaymentType> response = this.paymentTypeDAO.findById(paymentTypeId);
+        if (!response.isPresent()) return;
+
+        PaymentType entity = response.get();
+        entity.setActive(false);
+        entity.setArchivedAt(this.dateProvider.getDateNow().getTime());
+
+        this.paymentTypeDAO.save(entity);
     }
 
     public void insert(PaymentType paymentType) {

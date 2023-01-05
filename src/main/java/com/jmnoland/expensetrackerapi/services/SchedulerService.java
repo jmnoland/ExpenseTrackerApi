@@ -6,6 +6,7 @@ import com.jmnoland.expensetrackerapi.interfaces.services.ExpenseServiceInterfac
 import com.jmnoland.expensetrackerapi.interfaces.services.RecurringExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.ExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
+import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,11 @@ public class SchedulerService {
     {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
         for(String id : clientIdList) {
-            List<RecurringExpenseDto> recurExpenseList = this.recurringExpenseService.getRecurringExpenses(id);
+
+            ServiceResponse<List<RecurringExpenseDto>> response = this.recurringExpenseService.getRecurringExpenses(id);
+            if (!response.successful) continue;
+            List<RecurringExpenseDto> recurExpenseList = response.responseObject;
+
             List<ExpenseDto> expenseDtos = CreatePendingExpenses(recurExpenseList);
             for(ExpenseDto expenseDto : expenseDtos) {
                 this.expenseService.insert(expenseDto);

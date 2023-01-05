@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RecurringExpenseServiceInterface {
 
-    List<RecurringExpenseDto> getRecurringExpenses(String clientId);
+    ServiceResponse<List<RecurringExpenseDto>> getRecurringExpenses(String clientId);
 
     ServiceResponse<RecurringExpenseDto> insert(RecurringExpenseDto recurringExpense);
 

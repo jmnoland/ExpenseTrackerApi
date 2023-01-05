@@ -12,6 +12,8 @@ public interface PaymentTypeRepositoryInterface {
 
     boolean paymentTypeExists(String paymentTypeName);
 
+    void archivePaymentType(String paymentTypeId);
+
     void insert(PaymentType paymentType);
 
     void update(PaymentType paymentType);

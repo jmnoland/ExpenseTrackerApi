@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface PaymentTypeServiceInterface {
 
-    List<PaymentTypeDto> getPaymentTypes(String clientId);
+    ServiceResponse<List<PaymentTypeDto>> getPaymentTypes(String clientId);
 
     ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType);
+
+    ServiceResponse<String> archivePaymentType(String paymentTypeId);
 
     void delete(PaymentTypeDto paymentType);
 

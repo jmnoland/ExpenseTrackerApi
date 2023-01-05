@@ -25,9 +25,11 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
         this.mapper = paymentTypeMapper;
     }
 
-    public List<PaymentTypeDto> getPaymentTypes(String clientId) {
+    public ServiceResponse<List<PaymentTypeDto>> getPaymentTypes(String clientId) {
         List<PaymentType> paymentTypes = this.paymentTypeRepository.getPaymentTypes(clientId);
-        return this.mapper.entityToDto(paymentTypes);
+        List<PaymentTypeDto> list = this.mapper.entityToDto(paymentTypes);
+
+        return new ServiceResponse<>(list, true, null);
     }
 
     public ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType) {
@@ -51,6 +53,11 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
                 validationErrors.isEmpty(),
                 validationErrors
         );
+    }
+
+    public ServiceResponse<String> archivePaymentType(String paymentTypeId) {
+        this.paymentTypeRepository.archivePaymentType(paymentTypeId);
+        return new ServiceResponse<String>(paymentTypeId, true, null);
     }
 
     public void delete(PaymentTypeDto paymentType) {

@@ -34,9 +34,11 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
         this.mapper = recurringExpenseMapper;
     }
 
-    public List<RecurringExpenseDto> getRecurringExpenses(String clientId) {
+    public ServiceResponse<List<RecurringExpenseDto>> getRecurringExpenses(String clientId) {
         List<RecurringExpense> expenses = this.recurringExpenseRepository.getRecurringExpenses(clientId);
-        return this.mapper.entityToDto(expenses);
+        List<RecurringExpenseDto> list = this.mapper.entityToDto(expenses);
+
+        return new ServiceResponse<>(list, true, null);
     }
 
     public ServiceResponse<RecurringExpenseDto> insert(RecurringExpenseDto recurringExpense) {

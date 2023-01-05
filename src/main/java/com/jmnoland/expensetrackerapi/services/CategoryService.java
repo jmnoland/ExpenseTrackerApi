@@ -26,9 +26,11 @@ public class CategoryService implements CategoryServiceInterface {
         this.mapper = categoryMapper;
     }
 
-    public List<CategoryDto> getAllCategories(String clientId) {
+    public ServiceResponse<List<CategoryDto>> getAllCategories(String clientId) {
         List<Category> categoryList = this.categoryRepository.getAllCategoriesByClientId(clientId);
-        return this.mapper.entityToDto(categoryList);
+        List<CategoryDto> list = this.mapper.entityToDto(categoryList);
+
+        return new ServiceResponse<>(list, true, null);
     }
 
     public ServiceResponse<CategoryDto> insert(CategoryDto category) {

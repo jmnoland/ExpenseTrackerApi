@@ -43,7 +43,7 @@ public class PaymentTypeServiceTest {
         when(this.mapper.dtoToEntity(request)).thenReturn(output);
         when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(false);
 
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, true);
 
         assertTrue(response.successful);
         assertNotNull(response.validationErrors);
@@ -55,7 +55,7 @@ public class PaymentTypeServiceTest {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, null, null, null);
         PaymentType output = this.mapper.dtoToEntity(request);
 
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, true);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
@@ -68,7 +68,7 @@ public class PaymentTypeServiceTest {
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(true);
 
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, false);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
@@ -76,12 +76,26 @@ public class PaymentTypeServiceTest {
         verify(paymentTypeRepositoryInterface, never()).insert(output);
     }
     @Test
+    public void InsertPaymentType_ShouldBeSuccessful_WhenPaymentTypeNameExistsWithArchiving() {
+        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
+        boolean archivePaymentType = true;
+        PaymentType output = this.mapper.dtoToEntity(request);
+        when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(true);
+
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, archivePaymentType);
+
+        assertTrue(response.successful);
+        assertNotNull(response.validationErrors);
+        assertTrue(response.validationErrors.isEmpty());
+        verify(paymentTypeRepositoryInterface, times(1)).insert(output);
+    }
+    @Test
     public void InsertPaymentType_ShouldNotBeSuccessful_WhenChargeIsLessThanZero() {
         PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", -1F, null);
         PaymentType output = this.mapper.dtoToEntity(request);
         when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(false);
 
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, true);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);

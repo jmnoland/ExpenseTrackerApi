@@ -32,11 +32,15 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
         return new ServiceResponse<>(list, true, null);
     }
 
-    public ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType) {
+    public ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType, boolean archivePaymentType) {
         boolean paymentTypeExists = this.paymentTypeRepository.paymentTypeExists(paymentType.name);
 
         List<ValidationError> validationErrors = new CreatePaymentTypeValidator()
-                .validate(paymentType, paymentTypeExists);
+                .validate(paymentType, paymentTypeExists, archivePaymentType);
+
+        if (archivePaymentType) {
+            this.archivePaymentType(paymentType.paymentTypeId);
+        }
 
         PaymentType newPaymentType = null;
         if (validationErrors.isEmpty()) {
@@ -57,7 +61,7 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
 
     public ServiceResponse<String> archivePaymentType(String paymentTypeId) {
         this.paymentTypeRepository.archivePaymentType(paymentTypeId);
-        return new ServiceResponse<String>(paymentTypeId, true, null);
+        return new ServiceResponse<>(paymentTypeId, true, null);
     }
 
     public void delete(PaymentTypeDto paymentType) {

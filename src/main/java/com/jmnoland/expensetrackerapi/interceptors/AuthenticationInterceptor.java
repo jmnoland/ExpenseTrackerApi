@@ -1,6 +1,7 @@
 package com.jmnoland.expensetrackerapi.interceptors;
 
 import com.jmnoland.expensetrackerapi.helpers.ApiKeyHelper;
+import com.jmnoland.expensetrackerapi.helpers.RequestHelper;
 import com.jmnoland.expensetrackerapi.interfaces.services.AuthenticationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,13 +32,14 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         if (uri.contains("/api/") && !uri.contains("client/create")) {
             String key = ApiKeyHelper.getBase64String(requestServlet);
+            String clientId = RequestHelper.getClientIdFromHeader(requestServlet);
 
             if (key.length() == 0) {
                 send401Response(responseServlet);
                 return false;
             }
 
-            boolean isValid = this.authenticationService.validateApiKey(key);
+            boolean isValid = this.authenticationService.validateApiKey(key, clientId);
             if (!isValid)
                 send401Response(responseServlet);
             return isValid;

@@ -75,10 +75,11 @@ public class AuthenticationService implements AuthenticationServiceInterface {
         return response;
     }
 
-    public boolean validateApiKey(String apiKeyHeader) {
+    public boolean validateApiKey(String apiKeyHeader, String clientId) {
         ValidateApiKeyDto apiKey = ApiKeyHelper.decodeAuthHeader(apiKeyHeader);
 
         ApiKey key = this.apiKeyRepository.findApiKeyById(apiKey.KeyId);
+        if (key == null) return false;
 
         String hash;
         try {
@@ -87,6 +88,8 @@ public class AuthenticationService implements AuthenticationServiceInterface {
             return false;
         }
 
-        return key != null && Objects.equals(key.getKeyHash(), hash);
+        boolean keyMatch = Objects.equals(key.getKeyHash(), hash);
+        boolean clientMatch = Objects.equals(key.getClientId(), clientId);
+        return keyMatch && clientMatch;
     }
 }

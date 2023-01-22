@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CreatePaymentTypeValidator {
 
-    public List<ValidationError> validate(PaymentTypeDto paymentTypeDto, boolean paymentTypeNameExists) {
+    public List<ValidationError> validate(PaymentTypeDto paymentTypeDto, boolean paymentTypeNameExists, boolean archivePaymentType) {
         List<ValidationError> validationErrors = new ArrayList<>();
 
         if (paymentTypeDto.name == null || paymentTypeDto.name.equals("")) {
@@ -16,7 +16,7 @@ public class CreatePaymentTypeValidator {
                     "Name",
                     "Name is required"
             ));
-        } else if (paymentTypeNameExists) {
+        } else if (!archivePaymentType && paymentTypeNameExists) {
             validationErrors.add(new ValidationError(
                     "Name",
                     "This name is already in use"

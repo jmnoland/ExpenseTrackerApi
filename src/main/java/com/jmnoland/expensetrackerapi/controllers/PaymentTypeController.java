@@ -3,6 +3,7 @@ package com.jmnoland.expensetrackerapi.controllers;
 import com.jmnoland.expensetrackerapi.interfaces.services.PaymentTypeServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.PaymentTypeDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
+import com.jmnoland.expensetrackerapi.models.requests.CreatePaymentTypeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,8 @@ public class PaymentTypeController {
     }
 
     @PostMapping()
-    public ServiceResponse<PaymentTypeDto> createPaymentType(@RequestBody PaymentTypeDto paymentType) {
-        return this.paymentTypeService.insert(paymentType);
+    public ServiceResponse<PaymentTypeDto> createPaymentType(@RequestBody CreatePaymentTypeRequest paymentType) {
+        return this.paymentTypeService.insert(paymentType, paymentType.archivePaymentType);
     }
 
     @PostMapping("archive")

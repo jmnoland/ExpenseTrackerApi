@@ -9,7 +9,7 @@ public interface PaymentTypeServiceInterface {
 
     ServiceResponse<List<PaymentTypeDto>> getPaymentTypes(String clientId);
 
-    ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType);
+    ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType, boolean archivePaymentType);
 
     ServiceResponse<String> archivePaymentType(String paymentTypeId);
 

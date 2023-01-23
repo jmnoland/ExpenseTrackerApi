@@ -27,8 +27,8 @@ public class ExpenseRepository implements ExpenseRepositoryInterface {
         return this.expenseDao.existsById(expenseId);
     }
 
-    public Optional<Expense> getExpense(String expenseId) {
-        return this.expenseDao.findById(expenseId);
+    public Optional<Expense> getExpense(String expenseId, String clientId) {
+        return this.expenseDao.findExpenseById(expenseId, clientId);
     }
 
     public void insert(Expense expense) {

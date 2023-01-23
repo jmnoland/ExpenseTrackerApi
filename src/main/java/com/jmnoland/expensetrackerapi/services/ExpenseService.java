@@ -67,8 +67,8 @@ public class ExpenseService implements ExpenseServiceInterface {
         );
     }
 
-    public void delete(String expenseId) {
-        Optional<Expense> existing = this.expenseRepository.getExpense(expenseId);
+    public void delete(String expenseId, String clientId) {
+        Optional<Expense> existing = this.expenseRepository.getExpense(expenseId, clientId);
         if (!existing.isPresent()) return;
         Expense test = existing.get();
         this.expenseRepository.delete(test);

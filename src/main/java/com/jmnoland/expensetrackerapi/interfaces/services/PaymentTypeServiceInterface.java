@@ -11,7 +11,7 @@ public interface PaymentTypeServiceInterface {
 
     ServiceResponse<PaymentTypeDto> insert(PaymentTypeDto paymentType, boolean archivePaymentType);
 
-    ServiceResponse<String> archivePaymentType(String paymentTypeId);
+    ServiceResponse<String> archivePaymentType(String paymentTypeId, String clientId);
 
     void delete(PaymentTypeDto paymentType);
 

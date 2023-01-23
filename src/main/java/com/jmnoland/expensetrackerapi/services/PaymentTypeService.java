@@ -39,7 +39,7 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
                 .validate(paymentType, paymentTypeExists, archivePaymentType);
 
         if (archivePaymentType) {
-            this.archivePaymentType(paymentType.paymentTypeId);
+            this.archivePaymentType(paymentType.paymentTypeId, paymentType.clientId);
         }
 
         PaymentType newPaymentType = null;
@@ -59,7 +59,7 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
         );
     }
 
-    public ServiceResponse<String> archivePaymentType(String paymentTypeId) {
+    public ServiceResponse<String> archivePaymentType(String paymentTypeId, String clientId) {
         this.paymentTypeRepository.archivePaymentType(paymentTypeId);
         return new ServiceResponse<>(paymentTypeId, true, null);
     }

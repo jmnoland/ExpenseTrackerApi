@@ -11,7 +11,7 @@ public interface ExpenseServiceInterface {
 
     ServiceResponse<ExpenseDto> insert(ExpenseDto expense);
 
-    void delete(String expense);
+    void delete(String expenseId, String clientId);
 
     ServiceResponse<ExpenseDto> update(ExpenseDto expense);
 }

@@ -11,7 +11,7 @@ public interface ExpenseRepositoryInterface {
 
     boolean expenseExists(String expenseId);
 
-    Optional<Expense> getExpense(String expenseId);
+    Optional<Expense> getExpense(String expenseId, String clientId);
 
     void insert(Expense expense);
 

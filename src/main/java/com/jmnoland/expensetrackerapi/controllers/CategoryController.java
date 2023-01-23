@@ -31,16 +31,19 @@ public class CategoryController {
 
     @PostMapping()
     public ServiceResponse<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
+        categoryDto.clientId = RequestHelper.getClientIdFromHeader(this.request);
         return this.categoryService.insert(categoryDto);
     }
 
     @PatchMapping()
     public ServiceResponse<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto) {
+        categoryDto.clientId = RequestHelper.getClientIdFromHeader(this.request);
         return this.categoryService.update(categoryDto);
     }
 
     @DeleteMapping()
     public void deleteCategory(@RequestBody CategoryDto categoryDto) {
+        categoryDto.clientId = RequestHelper.getClientIdFromHeader(this.request);
         this.categoryService.delete(categoryDto);
     }
 }

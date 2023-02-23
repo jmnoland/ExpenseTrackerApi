@@ -1,5 +1,6 @@
 package com.jmnoland.expensetrackerapi.services;
 
+import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.CategoryRepositoryInterface;
 import com.jmnoland.expensetrackerapi.mapping.CategoryMapper;
 import com.jmnoland.expensetrackerapi.models.dtos.CategoryDto;
@@ -33,10 +34,12 @@ public class CategoryServiceTest {
     private CategoryRepositoryInterface categoryRepositoryInterface;
     @Mock
     private CategoryMapper categoryMapper;
+    @Mock
+    private DateProviderInterface dateProviderInterface;
 
     @Before
     public void Setup() {
-        classUnderTest = new CategoryService(categoryRepositoryInterface, categoryMapper);
+        classUnderTest = new CategoryService(categoryRepositoryInterface, categoryMapper, dateProviderInterface);
     }
 
     // insert tests

@@ -32,7 +32,11 @@ public class PaymentTypeRepository implements PaymentTypeRepositoryInterface {
     }
 
     public boolean paymentTypeExists(String paymentTypeName) {
-        return this.paymentTypeDAO.paymentTypeExistsByName(paymentTypeName);
+        try {
+            return this.paymentTypeDAO.paymentTypeExistsByName(paymentTypeName);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void archivePaymentType(String paymentTypeId) {

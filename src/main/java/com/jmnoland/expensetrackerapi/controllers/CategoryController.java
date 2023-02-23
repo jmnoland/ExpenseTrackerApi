@@ -4,6 +4,7 @@ import com.jmnoland.expensetrackerapi.helpers.RequestHelper;
 import com.jmnoland.expensetrackerapi.interfaces.services.CategoryServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.CategoryDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
+import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateCategoryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,15 +31,15 @@ public class CategoryController {
     }
 
     @PostMapping()
-    public ServiceResponse<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
-        categoryDto.clientId = RequestHelper.getClientIdFromHeader(this.request);
-        return this.categoryService.insert(categoryDto);
+    public ServiceResponse<CategoryDto> createCategory(@RequestBody CreateUpdateCategoryRequest payload) {
+        String clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.categoryService.createCategory(payload.name, clientId);
     }
 
     @PatchMapping()
-    public ServiceResponse<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto) {
-        categoryDto.clientId = RequestHelper.getClientIdFromHeader(this.request);
-        return this.categoryService.update(categoryDto);
+    public ServiceResponse<CategoryDto> updateCategory(@RequestBody CreateUpdateCategoryRequest payload) {
+        String clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.categoryService.updateCategory(payload.name, clientId, payload.categoryId);
     }
 
     @DeleteMapping()

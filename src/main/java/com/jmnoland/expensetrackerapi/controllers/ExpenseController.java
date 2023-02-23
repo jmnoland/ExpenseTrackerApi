@@ -4,6 +4,8 @@ import com.jmnoland.expensetrackerapi.helpers.RequestHelper;
 import com.jmnoland.expensetrackerapi.interfaces.services.ExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.ExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
+import com.jmnoland.expensetrackerapi.models.requests.BulkCreateUpdateExpenseRequest;
+import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,15 +32,21 @@ public class ExpenseController {
     }
 
     @PostMapping()
-    public ServiceResponse<ExpenseDto> createExpense(@RequestBody ExpenseDto expense) {
-        expense.clientId = RequestHelper.getClientIdFromHeader(this.request);
-        return this.expenseService.insert(expense);
+    public ServiceResponse<ExpenseDto> createExpense(@RequestBody CreateUpdateExpenseRequest payload) {
+        payload.clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.expenseService.createExpense(payload);
+    }
+
+    @PostMapping("bulk")
+    public ServiceResponse<List<ExpenseDto>> createBulkExpense(@RequestBody BulkCreateUpdateExpenseRequest payload) {
+        payload.clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.expenseService.createBulkExpense(payload);
     }
 
     @PatchMapping()
-    public ServiceResponse<ExpenseDto> updateExpense(@RequestBody ExpenseDto expense) {
-        expense.clientId = RequestHelper.getClientIdFromHeader(this.request);
-        return this.expenseService.update(expense);
+    public ServiceResponse<ExpenseDto> updateExpense(@RequestBody CreateUpdateExpenseRequest payload) {
+        payload.clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.expenseService.updateExpense(payload);
     }
 
     @DeleteMapping()

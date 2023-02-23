@@ -9,6 +9,10 @@ public interface CategoryServiceInterface {
 
     ServiceResponse<List<CategoryDto>> getAllCategories(String clientId);
 
+    ServiceResponse<CategoryDto> createCategory(String name, String clientId);
+
+    ServiceResponse<CategoryDto> updateCategory(String name, String clientId, String categoryId);
+
     ServiceResponse<CategoryDto> insert(CategoryDto category);
 
     void delete(CategoryDto category);

@@ -1,5 +1,7 @@
 package com.jmnoland.expensetrackerapi.models.dtos;
 
+import com.mongodb.lang.Nullable;
+
 import java.util.Date;
 
 public class ExpenseDto {
@@ -10,6 +12,7 @@ public class ExpenseDto {
     public String name;
     public Date date;
     public Float amount;
+    @Nullable
     public String recurringExpenseId;
 
     public ExpenseDto(
@@ -20,6 +23,7 @@ public class ExpenseDto {
             String name,
             Date date,
             Float amount,
+            @Nullable
             String recurringExpenseId
     ) {
         this.expenseId = expenseId;

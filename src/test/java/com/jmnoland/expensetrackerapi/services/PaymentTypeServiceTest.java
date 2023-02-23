@@ -1,11 +1,13 @@
 package com.jmnoland.expensetrackerapi.services;
 
+import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.PaymentTypeRepositoryInterface;
 import com.jmnoland.expensetrackerapi.mapping.PaymentTypeMapper;
 import com.jmnoland.expensetrackerapi.models.dtos.PaymentTypeDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import com.jmnoland.expensetrackerapi.models.entities.PaymentType;
 
+import com.jmnoland.expensetrackerapi.models.requests.CreateUpdatePaymentTypeRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,21 +31,29 @@ public class PaymentTypeServiceTest {
     private PaymentTypeRepositoryInterface paymentTypeRepositoryInterface;
     @Mock
     private PaymentTypeMapper mapper;
+    @Mock
+    private DateProviderInterface dateProviderInterface;
 
     @Before
     public void Setup() {
-        this.classUnderTest = new PaymentTypeService(paymentTypeRepositoryInterface, mapper);
+        this.classUnderTest = new PaymentTypeService(paymentTypeRepositoryInterface, mapper, dateProviderInterface);
     }
 
     // insert tests
     @Test
     public void InsertPaymentType_ShouldBeSuccessful_WhenPaymentTypeIsValid() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
+        CreateUpdatePaymentTypeRequest request = new CreateUpdatePaymentTypeRequest();
+        request.clientId = "1";
+        request.name = "test";
+        request.paymentTypeId = "1";
+        request.archivePaymentType = false;
+        request.charge = 0f;
+
         PaymentType output = this.mapper.dtoToEntity(request);
         when(this.mapper.dtoToEntity(request)).thenReturn(output);
         when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(false);
 
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, true);
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
         assertTrue(response.successful);
         assertNotNull(response.validationErrors);

@@ -4,7 +4,7 @@ import com.jmnoland.expensetrackerapi.helpers.RequestHelper;
 import com.jmnoland.expensetrackerapi.interfaces.services.PaymentTypeServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.PaymentTypeDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
-import com.jmnoland.expensetrackerapi.models.requests.CreatePaymentTypeRequest;
+import com.jmnoland.expensetrackerapi.models.requests.CreateUpdatePaymentTypeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +31,9 @@ public class PaymentTypeController {
     }
 
     @PostMapping()
-    public ServiceResponse<PaymentTypeDto> createPaymentType(@RequestBody CreatePaymentTypeRequest paymentType) {
-        paymentType.clientId = RequestHelper.getClientIdFromHeader(this.request);
-        return this.paymentTypeService.insert(paymentType, paymentType.archivePaymentType);
+    public ServiceResponse<PaymentTypeDto> createPaymentType(@RequestBody CreateUpdatePaymentTypeRequest payload) {
+        payload.clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.paymentTypeService.insert(payload);
     }
 
     @PostMapping("archive")
@@ -43,9 +43,9 @@ public class PaymentTypeController {
     }
 
     @PatchMapping()
-    public ServiceResponse<PaymentTypeDto> updatePaymentType(@RequestBody PaymentTypeDto paymentType) {
-        paymentType.clientId = RequestHelper.getClientIdFromHeader(this.request);
-        return this.paymentTypeService.update(paymentType);
+    public ServiceResponse<PaymentTypeDto> updatePaymentType(@RequestBody CreateUpdatePaymentTypeRequest payload) {
+        payload.clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.paymentTypeService.update(payload);
     }
 
     @DeleteMapping()

@@ -35,7 +35,7 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
         List<PaymentType> paymentTypes = this.paymentTypeRepository.getPaymentTypes(clientId);
         List<PaymentTypeDto> list = this.mapper.entityToDto(paymentTypes);
 
-        return new ServiceResponse<>(list, true, null);
+        return new ServiceResponse<>(list, true);
     }
 
     public ServiceResponse<PaymentTypeDto> insert(CreateUpdatePaymentTypeRequest payload) {
@@ -61,7 +61,7 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
             try {
                 this.paymentTypeRepository.insert(newPaymentType);
             } catch (Exception e) {
-                return new ServiceResponse<>(null, false, null);
+                return new ServiceResponse<>(null, false);
             }
         }
 
@@ -74,7 +74,7 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
 
     public ServiceResponse<String> archivePaymentType(String paymentTypeId, String clientId) {
         this.paymentTypeRepository.archivePaymentType(paymentTypeId);
-        return new ServiceResponse<>(paymentTypeId, true, null);
+        return new ServiceResponse<>(paymentTypeId, true);
     }
 
     public void delete(PaymentTypeDto paymentType) {
@@ -101,7 +101,7 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
             try {
                 this.paymentTypeRepository.update(updatedPaymentType);
             } catch (Exception e) {
-                return new ServiceResponse<>(null, false, null);
+                return new ServiceResponse<>(null, false);
             }
         }
 

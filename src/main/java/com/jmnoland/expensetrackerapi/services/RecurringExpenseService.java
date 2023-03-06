@@ -38,7 +38,7 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
         List<RecurringExpense> expenses = this.recurringExpenseRepository.getRecurringExpenses(clientId);
         List<RecurringExpenseDto> list = this.mapper.entityToDto(expenses);
 
-        return new ServiceResponse<>(list, true, null);
+        return new ServiceResponse<>(list, true);
     }
 
     public ServiceResponse<RecurringExpenseDto> insert(RecurringExpenseDto recurringExpense) {
@@ -54,7 +54,7 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
             try {
                 this.recurringExpenseRepository.insert(newRecurringExpense);
             } catch (Exception e) {
-                return new ServiceResponse<>(null, false, null);
+                return new ServiceResponse<>(null, false);
             }
         }
 
@@ -84,7 +84,7 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
             try {
                 this.recurringExpenseRepository.update(updatedRecurringExpense);
             } catch (Exception e) {
-                return new ServiceResponse<>(null, false, null);
+                return new ServiceResponse<>(null, false);
             }
         }
 

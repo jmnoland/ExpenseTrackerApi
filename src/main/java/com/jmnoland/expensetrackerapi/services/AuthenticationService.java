@@ -59,7 +59,7 @@ public class AuthenticationService implements AuthenticationServiceInterface {
         this.apiKeyRepository.insert(this.mapper.dtoToEntity(newKey));
 
         ApiKeyResponse response = new ApiKeyResponse(newKey.getKeyId(), secret, newKey.getClientId());
-        return new ServiceResponse<>(response, true, null);
+        return new ServiceResponse<>(response, true);
     }
 
     public ServiceResponse<ApiKeyResponse> createNewClientApiKey(String apiKeyHeader) {

@@ -45,7 +45,7 @@ public class ExpenseService implements ExpenseServiceInterface {
         List<Expense> existingExpenses = this.expenseRepository.getExpenses(clientId);
         List<ExpenseDto> list = this.mapper.entityToDto(existingExpenses);
 
-        return new ServiceResponse<>(list, true, null);
+        return new ServiceResponse<>(list, true);
     }
 
     public ServiceResponse<ExpenseDto> createExpense(CreateUpdateExpenseRequest payload) {
@@ -95,7 +95,7 @@ public class ExpenseService implements ExpenseServiceInterface {
             try {
                 this.expenseRepository.insert(newExpense);
             } catch (Exception e) {
-                return new ServiceResponse<>(null, false, null);
+                return new ServiceResponse<>(null, false);
             }
         }
 
@@ -158,7 +158,7 @@ public class ExpenseService implements ExpenseServiceInterface {
             try {
                 this.expenseRepository.update(updatedExpense);
             } catch (Exception e) {
-                return new ServiceResponse<>(null, false, null);
+                return new ServiceResponse<>(null, false);
             }
         }
 

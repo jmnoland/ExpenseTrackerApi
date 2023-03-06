@@ -36,7 +36,7 @@ public class CategoryService implements CategoryServiceInterface {
         List<Category> categoryList = this.categoryRepository.getAllCategoriesByClientId(clientId);
         List<CategoryDto> list = this.mapper.entityToDto(categoryList);
 
-        return new ServiceResponse<>(list, true, null);
+        return new ServiceResponse<>(list, true);
     }
 
     public ServiceResponse<CategoryDto> createCategory(String name, String clientId) {
@@ -47,7 +47,7 @@ public class CategoryService implements CategoryServiceInterface {
 
     public ServiceResponse<CategoryDto> updateCategory(String name, String clientId, String categoryId) {
         Date dateTimeNow = dateProvider.getDateNow().getTime();
-        CategoryDto categoryDto = new CategoryDto(categoryId, clientId, name, null);
+        CategoryDto categoryDto = new CategoryDto(categoryId, clientId, name, dateTimeNow);
         return update(categoryDto);
     }
 
@@ -62,7 +62,7 @@ public class CategoryService implements CategoryServiceInterface {
             try {
                 this.categoryRepository.insert(newCategory);
             } catch (Exception e) {
-                return new ServiceResponse<>(null, false, null);
+                return new ServiceResponse<>(null, false);
             }
         }
 
@@ -89,7 +89,7 @@ public class CategoryService implements CategoryServiceInterface {
             try {
                 this.categoryRepository.update(newCategory);
             } catch (Exception e) {
-                return new ServiceResponse<>(null, false, null);
+                return new ServiceResponse<>(null, false);
             }
         }
 

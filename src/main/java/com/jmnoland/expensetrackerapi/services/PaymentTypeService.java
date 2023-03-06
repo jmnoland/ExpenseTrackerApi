@@ -90,7 +90,7 @@ public class PaymentTypeService implements PaymentTypeServiceInterface {
                 payload.charge,
                 dateProvider.getDateNow().getTime());
 
-        boolean paymentTypeExists = this.paymentTypeRepository.paymentTypeExists(paymentType.paymentTypeId);
+        boolean paymentTypeExists = this.paymentTypeRepository.paymentTypeExistsId(paymentType.paymentTypeId);
 
         List<ValidationError> validationErrors = new UpdatePaymentTypeValidator()
                 .validate(paymentType, paymentTypeExists);

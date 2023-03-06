@@ -1,5 +1,6 @@
 package com.jmnoland.expensetrackerapi.services;
 
+import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.CategoryRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.ExpenseRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.PaymentTypeRepositoryInterface;
@@ -36,6 +37,8 @@ public class ExpenseServiceTest {
     @Mock
     private PaymentTypeRepositoryInterface paymentTypeRepositoryInterface;
     @Mock
+    private DateProviderInterface dateProviderInterface;
+    @Mock
     private ExpenseMapper mapper;
 
     @Before
@@ -43,7 +46,8 @@ public class ExpenseServiceTest {
         classUnderTest = new ExpenseService(expenseRepository,
                 categoryRepositoryInterface,
                 paymentTypeRepositoryInterface,
-                mapper);
+                mapper,
+                dateProviderInterface);
     }
 
     // insert tests

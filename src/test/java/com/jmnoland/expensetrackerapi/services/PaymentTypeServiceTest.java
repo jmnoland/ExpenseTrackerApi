@@ -12,7 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Calendar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -49,9 +52,16 @@ public class PaymentTypeServiceTest {
         request.archivePaymentType = false;
         request.charge = 0f;
 
-        PaymentType output = this.mapper.dtoToEntity(request);
-        when(this.mapper.dtoToEntity(request)).thenReturn(output);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(false);
+        PaymentType output = new PaymentType(
+                request.paymentTypeId,
+                request.clientId,
+                true,
+                request.name,
+                request.charge,
+                null);
+
+        when(this.mapper.dtoToEntity(Mockito.any(PaymentTypeDto.class))).thenReturn(output);
+        when(dateProviderInterface.getDateNow()).thenReturn(Calendar.getInstance());
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
@@ -62,109 +72,155 @@ public class PaymentTypeServiceTest {
     }
     @Test
     public void InsertPaymentType_ShouldNotBeSuccessful_WhenRequiredFieldsAreNULL() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, null, null, null);
-        PaymentType output = this.mapper.dtoToEntity(request);
+        CreateUpdatePaymentTypeRequest request = new CreateUpdatePaymentTypeRequest();
+        request.clientId = "1";
+        request.name = null;
+        request.paymentTypeId = "1";
+        request.archivePaymentType = true;
+        request.charge = null;
 
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, true);
+        when(dateProviderInterface.getDateNow()).thenReturn(Calendar.getInstance());
+
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
         assertEquals(2, response.validationErrors.size());
-        verify(paymentTypeRepositoryInterface, never()).insert(output);
+        verify(paymentTypeRepositoryInterface, never()).insert(Mockito.any());
     }
     @Test
     public void InsertPaymentType_ShouldNotBeSuccessful_WhenPaymentTypeNameAlreadyExists() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
-        PaymentType output = this.mapper.dtoToEntity(request);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(true);
+        CreateUpdatePaymentTypeRequest request = new CreateUpdatePaymentTypeRequest();
+        request.clientId = "1";
+        request.name = "Card";
+        request.paymentTypeId = "1";
+        request.archivePaymentType = false;
+        request.charge = 1F;
 
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, false);
+        when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(true);
+        when(dateProviderInterface.getDateNow()).thenReturn(Calendar.getInstance());
+
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
         assertEquals(1, response.validationErrors.size());
-        verify(paymentTypeRepositoryInterface, never()).insert(output);
+        verify(paymentTypeRepositoryInterface, never()).insert(Mockito.any());
     }
     @Test
     public void InsertPaymentType_ShouldBeSuccessful_WhenPaymentTypeNameExistsWithArchiving() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
-        boolean archivePaymentType = true;
-        PaymentType output = this.mapper.dtoToEntity(request);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(true);
+        CreateUpdatePaymentTypeRequest request = new CreateUpdatePaymentTypeRequest();
+        request.clientId = "1";
+        request.name = "Card";
+        request.paymentTypeId = "1";
+        request.archivePaymentType = true;
+        request.charge = 1F;
 
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, archivePaymentType);
+        when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(true);
+        when(dateProviderInterface.getDateNow()).thenReturn(Calendar.getInstance());
+
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
         assertTrue(response.successful);
         assertNotNull(response.validationErrors);
         assertTrue(response.validationErrors.isEmpty());
-        verify(paymentTypeRepositoryInterface, times(1)).insert(output);
+        verify(paymentTypeRepositoryInterface, times(1)).insert(Mockito.any());
     }
     @Test
     public void InsertPaymentType_ShouldNotBeSuccessful_WhenChargeIsLessThanZero() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", -1F, null);
-        PaymentType output = this.mapper.dtoToEntity(request);
+        CreateUpdatePaymentTypeRequest request = new CreateUpdatePaymentTypeRequest();
+        request.clientId = "1";
+        request.name = "Card";
+        request.paymentTypeId = "1";
+        request.archivePaymentType = true;
+        request.charge = -1F;
+
+        when(dateProviderInterface.getDateNow()).thenReturn(Calendar.getInstance());
         when(paymentTypeRepositoryInterface.paymentTypeExists("Card")).thenReturn(false);
 
-        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request, true);
+        ServiceResponse<PaymentTypeDto> response = this.classUnderTest.insert(request);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
         assertEquals(1, response.validationErrors.size());
-        verify(paymentTypeRepositoryInterface, never()).insert(output);
+        verify(paymentTypeRepositoryInterface, never()).insert(Mockito.any());
     }
 
     // update tests
     @Test
     public void UpdatePaymentType_ShouldBeSuccessful_WhenPaymentTypeIsValid() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
-        PaymentType output = this.mapper.dtoToEntity(request);
-        when(this.mapper.dtoToEntity(request)).thenReturn(output);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
+        CreateUpdatePaymentTypeRequest request = new CreateUpdatePaymentTypeRequest();
+        request.clientId = "1";
+        request.name = "Card";
+        request.paymentTypeId = "1";
+        request.archivePaymentType = true;
+        request.charge = 1F;
+
+        when(dateProviderInterface.getDateNow()).thenReturn(Calendar.getInstance());
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 
         assertTrue(response.successful);
         assertNotNull(response.validationErrors);
         assertTrue(response.validationErrors.isEmpty());
-        verify(paymentTypeRepositoryInterface, times(1)).update(output);
+        verify(paymentTypeRepositoryInterface, times(1)).update(Mockito.any());
     }
     @Test
     public void UpdatePaymentType_ShouldNotBeSuccessful_WhenRequiredFieldsAreNULL() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, null, null, null);
-        PaymentType output = this.mapper.dtoToEntity(request);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
+        CreateUpdatePaymentTypeRequest request = new CreateUpdatePaymentTypeRequest();
+        request.clientId = "1";
+        request.name = null;
+        request.paymentTypeId = "1";
+        request.archivePaymentType = true;
+        request.charge = null;
+
+        when(dateProviderInterface.getDateNow()).thenReturn(Calendar.getInstance());
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
         assertEquals(2, response.validationErrors.size());
-        verify(paymentTypeRepositoryInterface, never()).update(output);
+        verify(paymentTypeRepositoryInterface, never()).update(Mockito.any());
     }
     @Test
     public void UpdatePaymentType_ShouldNotBeSuccessful_WhenPaymentTypeDoesNotExist() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", 1F, null);
-        PaymentType output = this.mapper.dtoToEntity(request);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(false);
+        CreateUpdatePaymentTypeRequest request = new CreateUpdatePaymentTypeRequest();
+        request.clientId = "1";
+        request.name = "Card";
+        request.paymentTypeId = "1";
+        request.archivePaymentType = true;
+        request.charge = 1F;
+
+        when(dateProviderInterface.getDateNow()).thenReturn(Calendar.getInstance());
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId("1")).thenReturn(false);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
         assertEquals(1, response.validationErrors.size());
-        verify(paymentTypeRepositoryInterface, never()).update(output);
+        verify(paymentTypeRepositoryInterface, never()).update(Mockito.any());
     }
     @Test
     public void UpdatePaymentType_ShouldNotBeSuccessful_WhenChargeIsLessThanZero() {
-        PaymentTypeDto request = new PaymentTypeDto("1", "1", true, "Card", -1F, null);
-        PaymentType output = this.mapper.dtoToEntity(request);
-        when(paymentTypeRepositoryInterface.paymentTypeExists("1")).thenReturn(true);
+        CreateUpdatePaymentTypeRequest request = new CreateUpdatePaymentTypeRequest();
+        request.clientId = "1";
+        request.name = "Card";
+        request.paymentTypeId = "1";
+        request.archivePaymentType = true;
+        request.charge = -1F;
+
+        when(dateProviderInterface.getDateNow()).thenReturn(Calendar.getInstance());
+        when(paymentTypeRepositoryInterface.paymentTypeExistsId("1")).thenReturn(true);
 
         ServiceResponse<PaymentTypeDto> response = this.classUnderTest.update(request);
 
         assertFalse(response.successful);
         assertNotNull(response.validationErrors);
         assertEquals(1, response.validationErrors.size());
-        verify(paymentTypeRepositoryInterface, never()).update(output);
+        verify(paymentTypeRepositoryInterface, never()).update(Mockito.any());
     }
 }

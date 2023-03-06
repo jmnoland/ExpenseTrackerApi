@@ -50,8 +50,9 @@ public class SchedulerService {
 
     public List<CreateUpdateExpenseRequest> CreatePendingExpenses(List<RecurringExpenseDto> recurExpenseList) {
         List<CreateUpdateExpenseRequest> expenseRequests = new ArrayList<>();
+        Calendar currentTime = this.dateProvider.getDateNow();
         for(RecurringExpenseDto recurringExpense : recurExpenseList) {
-            ServiceResponse<CreateUpdateExpenseRequest> newExpense = GenerateExpenseForDate(recurringExpense);
+            ServiceResponse<CreateUpdateExpenseRequest> newExpense = GenerateExpenseForDate(recurringExpense, currentTime);
             if (newExpense.successful) {
                 expenseRequests.add(newExpense.responseObject);
                 this.recurringExpenseService.update(recurringExpense);
@@ -60,16 +61,15 @@ public class SchedulerService {
         return expenseRequests;
     }
 
-    public ServiceResponse<CreateUpdateExpenseRequest> GenerateExpenseForDate(RecurringExpenseDto recurringExpense) {
-        Calendar currentTime = this.dateProvider.getDateNow();
+    public ServiceResponse<CreateUpdateExpenseRequest> GenerateExpenseForDate(RecurringExpenseDto recurringExpense, Calendar chosenDate) {
         CreateUpdateExpenseRequest expenseRequest = null;
 
         if (recurringExpense.lastExpenseDate == null) {
-            if (currentTime.getTime().after(recurringExpense.startDate)
-                    || currentTime.getTime().equals(recurringExpense.startDate)) {
-                recurringExpense.lastExpenseDate = currentTime.getTime();
+            if (chosenDate.getTime().after(recurringExpense.startDate)
+                    || chosenDate.getTime().equals(recurringExpense.startDate)) {
+                recurringExpense.lastExpenseDate = chosenDate.getTime();
 
-                expenseRequest = CreateExpenseRequest(recurringExpense, currentTime);
+                expenseRequest = CreateExpenseRequest(recurringExpense, chosenDate);
             }
         } else {
             Calendar lastExpenseDate = new GregorianCalendar();
@@ -96,14 +96,14 @@ public class SchedulerService {
                     break;
             }
             if (dateBeforeChange.compareTo(lastExpenseDate) != 0) {
-                if (lastExpenseDate.compareTo(currentTime) <= 0) {
+                if (lastExpenseDate.getTime().after(chosenDate.getTime())) {
                     recurringExpense.lastExpenseDate = lastExpenseDate.getTime();
 
-                    expenseRequest = CreateExpenseRequest(recurringExpense, currentTime);
+                    expenseRequest = CreateExpenseRequest(recurringExpense, chosenDate);
                 }
             }
         }
-        return new ServiceResponse<>(expenseRequest, expenseRequest != null, null);
+        return new ServiceResponse<>(expenseRequest, expenseRequest != null);
     }
 
     private CreateUpdateExpenseRequest CreateExpenseRequest(RecurringExpenseDto recurringExpense, Calendar currentTime) {

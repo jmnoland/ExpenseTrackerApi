@@ -15,5 +15,7 @@ public class CreateUpdateExpenseRequest {
     @Nullable
     public Date date;
     public Float amount;
-    public CreateUpdateExpenseRequest() {};
+    @Nullable
+    public String recurringExpenseId;
+    public CreateUpdateExpenseRequest() {}
 }

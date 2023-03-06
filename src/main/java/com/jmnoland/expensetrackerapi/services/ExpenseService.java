@@ -58,7 +58,7 @@ public class ExpenseService implements ExpenseServiceInterface {
                 payload.name,
                 useDate,
                 payload.amount,
-                null
+                payload.recurringExpenseId
         );
         return insert(expenseDto);
     }
@@ -76,7 +76,7 @@ public class ExpenseService implements ExpenseServiceInterface {
                     request.name,
                     useDate,
                     request.amount,
-                    null
+                    request.recurringExpenseId
             ));
         }
         return bulkInsert(expenses);
@@ -111,22 +111,8 @@ public class ExpenseService implements ExpenseServiceInterface {
         List<ValidationError> responseValidationErrors = new ArrayList<>();
 
         for (ExpenseDto expense: expenseDtos) {
-            boolean categoryExists = this.categoryRepositoryInterface.categoryExists(expense.categoryId);
-            boolean paymentTypeExists = this.paymentTypeRepositoryInterface.paymentTypeExistsId(expense.paymentTypeId);
-
-            List<ValidationError> validationErrors = new CreateExpenseValidator()
-                    .validate(expense, categoryExists, paymentTypeExists);
-
-            Expense newExpense = null;
-            if (validationErrors.isEmpty()) {
-                newExpense = this.mapper.dtoToEntity(expense);
-                try {
-                    this.expenseRepository.insert(newExpense);
-                } catch (Exception e) {
-                    return new ServiceResponse<>(null, false, null);
-                }
-            }
-            responseValidationErrors.addAll(validationErrors);
+            ServiceResponse<ExpenseDto> response = this.insert(expense);
+            responseValidationErrors.addAll(response.validationErrors);
         }
 
         return new ServiceResponse<>(

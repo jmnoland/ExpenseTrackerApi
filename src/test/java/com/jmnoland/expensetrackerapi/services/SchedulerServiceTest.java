@@ -60,4 +60,171 @@ public class SchedulerServiceTest {
         assertSame(response.responseObject.recurringExpenseId, existing.recurringExpenseId);
         assertTrue(response.validationErrors == null || response.validationErrors.isEmpty());
     }
+    @Test
+    public void GenerateExpense_ShouldCreateMonthlyExpense_WhenLastExpenseAtLeastMonthBefore() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MONTH, -2);
+        Calendar lastExpenseDate = Calendar.getInstance();
+        lastExpenseDate.add(Calendar.MONTH, -1);
+        RecurringExpenseDto existing = new RecurringExpenseDto(UUID.randomUUID().toString(),
+                "client1",
+                "Test",
+                "typeId",
+                "Subscription",
+                startDate.getTime(),
+                null,
+                Frequency.MONTHLY,
+                10F,
+                lastExpenseDate.getTime());
+
+        ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
+
+        assertTrue(response.successful);
+        assertNotNull(response.responseObject);
+        assertSame(response.responseObject.recurringExpenseId, existing.recurringExpenseId);
+        assertTrue(response.validationErrors == null || response.validationErrors.isEmpty());
+    }
+    @Test
+    public void GenerateExpense_ShouldNotCreateMonthlyExpense_WhenLastExpenseLargerThanMonthBefore() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MONTH, -2);
+        Calendar lastExpenseDate = Calendar.getInstance();
+        lastExpenseDate.add(Calendar.MONTH, -1);
+        lastExpenseDate.add(Calendar.HOUR, 24);
+        RecurringExpenseDto existing = new RecurringExpenseDto(UUID.randomUUID().toString(),
+                "client1",
+                "Test",
+                "typeId",
+                "Subscription",
+                startDate.getTime(),
+                null,
+                Frequency.MONTHLY,
+                10F,
+                lastExpenseDate.getTime());
+
+        ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
+
+        assertFalse(response.successful);
+        assertNull(response.responseObject);
+    }
+
+    @Test
+    public void GenerateExpense_ShouldCreateWeeklyExpense_WhenLastExpenseAtLeastWeekBefore() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.HOUR, (7 * 24) * -2);
+        Calendar lastExpenseDate = Calendar.getInstance();
+        lastExpenseDate.add(Calendar.HOUR, (7 * 24) * -1);
+        RecurringExpenseDto existing = new RecurringExpenseDto(UUID.randomUUID().toString(),
+                "client1",
+                "Test",
+                "typeId",
+                "Subscription",
+                startDate.getTime(),
+                null,
+                Frequency.WEEKLY,
+                10F,
+                lastExpenseDate.getTime());
+
+        ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
+
+        assertTrue(response.successful);
+        assertNotNull(response.responseObject);
+        assertSame(response.responseObject.recurringExpenseId, existing.recurringExpenseId);
+        assertTrue(response.validationErrors == null || response.validationErrors.isEmpty());
+    }
+    @Test
+    public void GenerateExpense_ShouldNotCreateWeeklyExpense_WhenLastExpenseLargerThanWeekBefore() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.HOUR, (7 * 24) * -2);
+        Calendar lastExpenseDate = Calendar.getInstance();
+        lastExpenseDate.add(Calendar.HOUR, (6 * 24) * -1);
+        RecurringExpenseDto existing = new RecurringExpenseDto(UUID.randomUUID().toString(),
+                "client1",
+                "Test",
+                "typeId",
+                "Subscription",
+                startDate.getTime(),
+                null,
+                Frequency.WEEKLY,
+                10F,
+                lastExpenseDate.getTime());
+
+        ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
+
+        assertFalse(response.successful);
+        assertNull(response.responseObject);
+    }
+
+    @Test
+    public void GenerateExpense_ShouldCreateDailyExpense_WhenLastExpenseAtLeastDayBefore() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.HOUR, 24 * -2);
+        Calendar lastExpenseDate = Calendar.getInstance();
+        lastExpenseDate.add(Calendar.HOUR, 24 * -1);
+        RecurringExpenseDto existing = new RecurringExpenseDto(UUID.randomUUID().toString(),
+                "client1",
+                "Test",
+                "typeId",
+                "Subscription",
+                startDate.getTime(),
+                null,
+                Frequency.DAILY,
+                10F,
+                lastExpenseDate.getTime());
+
+        ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
+
+        assertTrue(response.successful);
+        assertNotNull(response.responseObject);
+        assertSame(response.responseObject.recurringExpenseId, existing.recurringExpenseId);
+        assertTrue(response.validationErrors == null || response.validationErrors.isEmpty());
+    }
+
+    @Test
+    public void GenerateExpense_ShouldCreateYearlyExpense_WhenLastExpenseAtLeastYearBefore() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.YEAR, -2);
+        Calendar lastExpenseDate = Calendar.getInstance();
+        lastExpenseDate.add(Calendar.YEAR, -1);
+        RecurringExpenseDto existing = new RecurringExpenseDto(UUID.randomUUID().toString(),
+                "client1",
+                "Test",
+                "typeId",
+                "Subscription",
+                startDate.getTime(),
+                null,
+                Frequency.YEARLY,
+                10F,
+                lastExpenseDate.getTime());
+
+        ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
+
+        assertTrue(response.successful);
+        assertNotNull(response.responseObject);
+        assertSame(response.responseObject.recurringExpenseId, existing.recurringExpenseId);
+        assertTrue(response.validationErrors == null || response.validationErrors.isEmpty());
+    }
+    @Test
+    public void GenerateExpense_ShouldNotCreateYearlyExpense_WhenLastExpenseLargerThanYearBefore() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.YEAR, -2);
+        Calendar lastExpenseDate = Calendar.getInstance();
+        lastExpenseDate.add(Calendar.YEAR, -1);
+        lastExpenseDate.add(Calendar.MONTH, 1);
+        RecurringExpenseDto existing = new RecurringExpenseDto(UUID.randomUUID().toString(),
+                "client1",
+                "Test",
+                "typeId",
+                "Subscription",
+                startDate.getTime(),
+                null,
+                Frequency.YEARLY,
+                10F,
+                lastExpenseDate.getTime());
+
+        ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
+
+        assertFalse(response.successful);
+        assertNull(response.responseObject);
+    }
 }

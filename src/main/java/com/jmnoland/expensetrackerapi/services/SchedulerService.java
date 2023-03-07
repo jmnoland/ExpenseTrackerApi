@@ -10,10 +10,7 @@ import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class SchedulerService {
@@ -32,7 +29,7 @@ public class SchedulerService {
         this.apiKeyRepository = apiKeyRepository;
         this.dateProvider = dateProvider;
     }
-    @Scheduled(cron = "0 12 * * * *")
+    @Scheduled(cron = "0 0 12 * * *")
     public void scheduleTask()
     {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
@@ -61,43 +58,44 @@ public class SchedulerService {
         return expenseRequests;
     }
 
-    public ServiceResponse<CreateUpdateExpenseRequest> GenerateExpenseForDate(RecurringExpenseDto recurringExpense, Calendar chosenDate) {
+    public ServiceResponse<CreateUpdateExpenseRequest> GenerateExpenseForDate(RecurringExpenseDto recurringExpense, Calendar chosenCalendar) {
         CreateUpdateExpenseRequest expenseRequest = null;
-
+        Date chosenDate = chosenCalendar.getTime();
         if (recurringExpense.lastExpenseDate == null) {
-            if (chosenDate.getTime().after(recurringExpense.startDate)
-                    || chosenDate.getTime().equals(recurringExpense.startDate)) {
-                recurringExpense.lastExpenseDate = chosenDate.getTime();
+            if (chosenDate.after(recurringExpense.startDate)
+                    || chosenDate.equals(recurringExpense.startDate)) {
+                recurringExpense.lastExpenseDate = chosenDate;
 
                 expenseRequest = CreateExpenseRequest(recurringExpense, chosenDate);
             }
         } else {
-            Calendar lastExpenseDate = new GregorianCalendar();
-            lastExpenseDate.setTime(recurringExpense.lastExpenseDate);
-            lastExpenseDate.set(Calendar.MINUTE, 0);
-            lastExpenseDate.set(Calendar.HOUR, 0);
-            lastExpenseDate.set(Calendar.SECOND, 0);
-            lastExpenseDate.set(Calendar.MILLISECOND, 0);
-            Calendar dateBeforeChange = (Calendar) lastExpenseDate.clone();
+            Calendar lastExpenseCalendar = new GregorianCalendar();
+            lastExpenseCalendar.setTime(recurringExpense.lastExpenseDate);
+            lastExpenseCalendar.set(Calendar.MINUTE, 0);
+            lastExpenseCalendar.set(Calendar.HOUR, 0);
+            lastExpenseCalendar.set(Calendar.SECOND, 0);
+            lastExpenseCalendar.set(Calendar.MILLISECOND, 0);
+            Calendar calendarBeforeChange = (Calendar) lastExpenseCalendar.clone();
             switch (recurringExpense.frequency) {
                 case MONTHLY:
-                    lastExpenseDate.add(Calendar.MONTH, 1);
+                    lastExpenseCalendar.add(Calendar.MONTH, 1);
                     break;
                 case WEEKLY:
-                    lastExpenseDate.add(Calendar.HOUR, 7 * 24);
+                    lastExpenseCalendar.add(Calendar.HOUR, 7 * 24);
                     break;
                 case DAILY:
-                    lastExpenseDate.add(Calendar.HOUR, 24);
+                    lastExpenseCalendar.add(Calendar.HOUR, 24);
                     break;
                 case YEARLY:
-                    lastExpenseDate.add(Calendar.YEAR, 1);
+                    lastExpenseCalendar.add(Calendar.YEAR, 1);
                     break;
                 default:
                     break;
             }
-            if (dateBeforeChange.compareTo(lastExpenseDate) != 0) {
-                if (lastExpenseDate.getTime().after(chosenDate.getTime())) {
-                    recurringExpense.lastExpenseDate = lastExpenseDate.getTime();
+            Date lastExpenseDate = lastExpenseCalendar.getTime();
+            if (calendarBeforeChange.compareTo(lastExpenseCalendar) != 0) {
+                if (lastExpenseDate.before(chosenDate) || lastExpenseDate.equals(chosenDate)) {
+                    recurringExpense.lastExpenseDate = lastExpenseCalendar.getTime();
 
                     expenseRequest = CreateExpenseRequest(recurringExpense, chosenDate);
                 }
@@ -106,13 +104,13 @@ public class SchedulerService {
         return new ServiceResponse<>(expenseRequest, expenseRequest != null);
     }
 
-    private CreateUpdateExpenseRequest CreateExpenseRequest(RecurringExpenseDto recurringExpense, Calendar currentTime) {
+    private CreateUpdateExpenseRequest CreateExpenseRequest(RecurringExpenseDto recurringExpense, Date currentTime) {
         CreateUpdateExpenseRequest expenseRequest = new CreateUpdateExpenseRequest();
         expenseRequest.clientId = recurringExpense.clientId;
         expenseRequest.categoryId = recurringExpense.categoryId;
         expenseRequest.paymentTypeId = recurringExpense.paymentTypeId;
         expenseRequest.name = recurringExpense.name;
-        expenseRequest.date = currentTime.getTime();
+        expenseRequest.date = currentTime;
         expenseRequest.amount = recurringExpense.amount;
         expenseRequest.recurringExpenseId = recurringExpense.recurringExpenseId;
         return expenseRequest;

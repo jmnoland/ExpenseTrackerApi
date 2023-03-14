@@ -9,12 +9,14 @@ import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import com.jmnoland.expensetrackerapi.models.dtos.ValidationError;
 import com.jmnoland.expensetrackerapi.models.entities.RecurringExpense;
+import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateRecurringExpenseRequest;
 import com.jmnoland.expensetrackerapi.validators.recurringexpense.CreateRecurringExpenseValidator;
 import com.jmnoland.expensetrackerapi.validators.recurringexpense.UpdateRecurringExpenseValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RecurringExpenseService implements RecurringExpenseServiceInterface {
@@ -39,6 +41,23 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
         List<RecurringExpenseDto> list = this.mapper.entityToDto(expenses);
 
         return new ServiceResponse<>(list, true);
+    }
+
+    public ServiceResponse<RecurringExpenseDto> createRecurringExpense(CreateUpdateRecurringExpenseRequest request) {
+        RecurringExpenseDto recurringExpense = new RecurringExpenseDto(
+                UUID.randomUUID().toString(),
+                request.clientId,
+                request.categoryId,
+                request.paymentTypeId,
+                request.name,
+                request.startDate,
+                request.endDate,
+                request.frequency,
+                request.amount,
+                request.lastExpenseDate
+        );
+
+        return insert(recurringExpense);
     }
 
     public ServiceResponse<RecurringExpenseDto> insert(RecurringExpenseDto recurringExpense) {
@@ -68,6 +87,23 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
     public void delete(RecurringExpenseDto recurringExpense) {
         RecurringExpense existing = this.mapper.dtoToEntity(recurringExpense);
         this.recurringExpenseRepository.insert(existing);
+    }
+
+    public ServiceResponse<RecurringExpenseDto> updateRecurringExpense(CreateUpdateRecurringExpenseRequest request) {
+        RecurringExpenseDto recurringExpense = new RecurringExpenseDto(
+                request.recurringExpenseId,
+                request.clientId,
+                request.categoryId,
+                request.paymentTypeId,
+                request.name,
+                request.startDate,
+                request.endDate,
+                request.frequency,
+                request.amount,
+                request.lastExpenseDate
+        );
+
+        return update(recurringExpense);
     }
 
     public ServiceResponse<RecurringExpenseDto> update(RecurringExpenseDto recurringExpense) {

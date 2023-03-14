@@ -4,6 +4,7 @@ import com.jmnoland.expensetrackerapi.helpers.RequestHelper;
 import com.jmnoland.expensetrackerapi.interfaces.services.RecurringExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
+import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateRecurringExpenseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,15 +31,15 @@ public class RecurringExpenseController {
     }
 
     @PostMapping()
-    public ServiceResponse<RecurringExpenseDto> createRecurringExpense(@RequestBody RecurringExpenseDto expense) {
-        expense.clientId = RequestHelper.getClientIdFromHeader(this.request);
-        return this.recurringExpenseService.insert(expense);
+    public ServiceResponse<RecurringExpenseDto> createRecurringExpense(@RequestBody CreateUpdateRecurringExpenseRequest request) {
+        request.clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.recurringExpenseService.createRecurringExpense(request);
     }
 
     @PatchMapping()
-    public ServiceResponse<RecurringExpenseDto> updateRecurringExpense(@RequestBody RecurringExpenseDto expense) {
-        expense.clientId = RequestHelper.getClientIdFromHeader(this.request);
-        return this.recurringExpenseService.update(expense);
+    public ServiceResponse<RecurringExpenseDto> updateRecurringExpense(@RequestBody CreateUpdateRecurringExpenseRequest request) {
+        request.clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.recurringExpenseService.updateRecurringExpense(request);
     }
 
     @DeleteMapping()

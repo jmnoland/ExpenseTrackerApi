@@ -46,6 +46,8 @@ public class RecurringExpense {
         this.lastExpenseDate = lastExpenseDate;
     }
 
+    public String getRecurringExpenseId() { return this.recurringExpenseId; }
+
     public String getClientId() {
         return clientId;
     }

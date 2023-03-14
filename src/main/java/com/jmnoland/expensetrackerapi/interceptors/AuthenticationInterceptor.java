@@ -30,7 +30,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest requestServlet, HttpServletResponse responseServlet, Object handler) throws IOException {
         String uri = requestServlet.getRequestURI();
 
-        if (uri.contains("/api/") && !uri.contains("client/create")) {
+        if (uri.contains("/api/")) {
             String key = ApiKeyHelper.getBase64String(requestServlet);
             String clientId = RequestHelper.getClientIdFromHeader(requestServlet);
 

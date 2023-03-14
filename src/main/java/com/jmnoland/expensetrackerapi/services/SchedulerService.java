@@ -29,7 +29,7 @@ public class SchedulerService {
         this.apiKeyRepository = apiKeyRepository;
         this.dateProvider = dateProvider;
     }
-    @Scheduled(cron = "0 0 12 * * *")
+    @Scheduled(cron = "0 0 12 * * ?")
     public void scheduleTask()
     {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();

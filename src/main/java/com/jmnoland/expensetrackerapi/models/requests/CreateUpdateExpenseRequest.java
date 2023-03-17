@@ -3,6 +3,7 @@ package com.jmnoland.expensetrackerapi.models.requests;
 import com.mongodb.lang.Nullable;
 
 import java.util.Date;
+import java.util.List;
 
 public class CreateUpdateExpenseRequest {
     @Nullable
@@ -17,5 +18,7 @@ public class CreateUpdateExpenseRequest {
     public Float amount;
     @Nullable
     public String recurringExpenseId;
+    @Nullable
+    public List<CreateUpdateLineItemRequest> lineItems;
     public CreateUpdateExpenseRequest() {}
 }

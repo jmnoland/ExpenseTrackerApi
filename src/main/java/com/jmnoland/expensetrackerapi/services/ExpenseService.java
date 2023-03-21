@@ -1,5 +1,6 @@
 package com.jmnoland.expensetrackerapi.services;
 
+import com.jmnoland.expensetrackerapi.helpers.ExpenseAmountHelper;
 import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.CategoryRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.ExpenseRepositoryInterface;
@@ -17,6 +18,8 @@ import com.jmnoland.expensetrackerapi.models.entities.LineItem;
 import com.jmnoland.expensetrackerapi.models.requests.BulkCreateUpdateExpenseRequest;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateLineItemRequest;
+import com.jmnoland.expensetrackerapi.models.responses.ExpenseActionResponse;
+import com.jmnoland.expensetrackerapi.models.responses.LineItemActionResponse;
 import com.jmnoland.expensetrackerapi.validators.expense.CreateExpenseValidator;
 import com.jmnoland.expensetrackerapi.validators.expense.UpdateExpenseValidator;
 import com.jmnoland.expensetrackerapi.validators.linitems.LineItemValidator;
@@ -60,9 +63,15 @@ public class ExpenseService implements ExpenseServiceInterface {
         return new ServiceResponse<>(list, true);
     }
 
-    public ServiceResponse<ExpenseDto> createExpense(CreateUpdateExpenseRequest payload) {
+    public ExpenseActionResponse createExpense(CreateUpdateExpenseRequest payload) {
         Date useDate = payload.date != null ? payload.date : dateProvider.getDateNow().getTime();
         String expenseId = UUID.randomUUID().toString();
+
+        float totalAmount = payload.amount;
+        if (payload.lineItems != null && !payload.lineItems.isEmpty()) {
+            totalAmount = ExpenseAmountHelper.calculateExpenseAmountFromLineItems(payload.lineItems);
+        }
+
         ExpenseDto expenseDto = new ExpenseDto(
                 expenseId,
                 payload.clientId,
@@ -70,61 +79,49 @@ public class ExpenseService implements ExpenseServiceInterface {
                 payload.paymentTypeId,
                 payload.name,
                 useDate,
-                payload.amount,
+                totalAmount,
                 payload.recurringExpenseId
         );
 
-        ServiceResponse<ExpenseDto> response = insert(expenseDto);
+        ServiceResponse<ExpenseDto> insertResult = insert(expenseDto);
 
-        if (payload.lineItems != null) {
-            List<LineItemDto> lineItems = new ArrayList<>();
-            for (CreateUpdateLineItemRequest request : payload.lineItems) {
-                lineItems.add(new LineItemDto(UUID.randomUUID().toString(), expenseId, request.name, request.amount, request.quantity));
-            }
-            this.createLineItems(lineItems);
+        if (!insertResult.successful)
+            return this.expenseMapper.dtoToResponse(expenseDto, null, insertResult.validationErrors);
+
+        if (payload.lineItems == null)
+            return this.expenseMapper.dtoToResponse(expenseDto, null, insertResult.validationErrors);
+
+        List<LineItemDto> lineItems = new ArrayList<>();
+        for (CreateUpdateLineItemRequest request : payload.lineItems) {
+            lineItems.add(new LineItemDto(UUID.randomUUID().toString(), expenseId, request.name, request.amount, request.quantity));
         }
-
-        return response;
+        List<LineItemActionResponse> lineItemResponses = createLineItems(lineItems);
+        return this.expenseMapper.dtoToResponse(expenseDto, lineItemResponses, insertResult.validationErrors);
     }
 
-    public ServiceResponse<List<LineItemDto>> createLineItems(List<LineItemDto> lineItemDtos) {
-        List<ValidationError> validationErrors = new ArrayList<>();
+    public List<LineItemActionResponse> createLineItems(List<LineItemDto> lineItemDtos) {
+        List<LineItemActionResponse> response = new ArrayList<>();
         LineItemValidator validator = new LineItemValidator();
         for (LineItemDto lineItem : lineItemDtos) {
             List<ValidationError> results = validator.validate(lineItem);
-            validationErrors.addAll(results);
 
             LineItem newLineItem;
             if (results.isEmpty()) {
                 newLineItem = this.lineItemMapper.dtoToEntity(lineItem);
-                try {
-                    this.lineItemRepository.insert(newLineItem);
-                } catch (Exception e) {
-                    return new ServiceResponse<>(null, false);
-                }
+                this.lineItemRepository.insert(newLineItem);
             }
+            response.add(this.lineItemMapper.dtoToResponse(lineItem, results));
         }
-        return new ServiceResponse<>(lineItemDtos, validationErrors.isEmpty(), validationErrors);
+        return response;
     }
 
-    public ServiceResponse<List<ExpenseDto>> createBulkExpense(BulkCreateUpdateExpenseRequest payload) {
-        List<ExpenseDto> expenses = new ArrayList<>();
+    public List<ExpenseActionResponse> createBulkExpense(BulkCreateUpdateExpenseRequest payload) {
+        List<ExpenseActionResponse> response = new ArrayList<>();
 
         for (CreateUpdateExpenseRequest request : payload.expenseRequestList) {
-            Date useDate = request.date != null ? request.date : dateProvider.getDateNow().getTime();
-            String expenseId = UUID.randomUUID().toString();
-            expenses.add(new ExpenseDto(
-                    expenseId,
-                    payload.clientId,
-                    request.categoryId,
-                    request.paymentTypeId,
-                    request.name,
-                    useDate,
-                    request.amount,
-                    request.recurringExpenseId
-            ));
+            response.add(createExpense(request));
         }
-        return bulkInsert(expenses);
+        return response;
     }
 
     public ServiceResponse<ExpenseDto> insert(ExpenseDto expense) {
@@ -174,7 +171,7 @@ public class ExpenseService implements ExpenseServiceInterface {
         this.expenseRepository.delete(test);
     }
 
-    public ServiceResponse<ExpenseDto> updateExpense(CreateUpdateExpenseRequest payload) {
+    public ExpenseActionResponse updateExpense(CreateUpdateExpenseRequest payload) {
         Date useDate = payload.date != null ? payload.date : dateProvider.getDateNow().getTime();
         ExpenseDto expenseDto = new ExpenseDto(
                 payload.expenseId,
@@ -186,7 +183,8 @@ public class ExpenseService implements ExpenseServiceInterface {
                 payload.amount,
                 null
         );
-        return insert(expenseDto);
+        ServiceResponse<ExpenseDto> updateResponse = update(expenseDto);
+        return this.expenseMapper.dtoToResponse(expenseDto, null, updateResponse.validationErrors);
     }
 
     public ServiceResponse<ExpenseDto> update(ExpenseDto expense) {

@@ -18,10 +18,10 @@ public class LineItemValidator {
         if (lineItem.name == null) {
             validationErrors.add(new ValidationError("name", "Name cannot be null"));
         }
-        if (lineItem.amount >= 0) {
+        if (lineItem.amount < 0) {
             validationErrors.add(new ValidationError("amount", "Amount cannot be less than 0"));
         }
-        if (lineItem.quantity > 0) {
+        if (lineItem.quantity <= 0) {
             validationErrors.add(new ValidationError("quantity", "Quantity must be larger than 0"));
         }
         return validationErrors;

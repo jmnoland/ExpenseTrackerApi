@@ -1,8 +1,10 @@
 package com.jmnoland.expensetrackerapi.mapping;
 
 import com.jmnoland.expensetrackerapi.models.dtos.PaymentTypeDto;
+import com.jmnoland.expensetrackerapi.models.dtos.ValidationError;
 import com.jmnoland.expensetrackerapi.models.entities.PaymentType;
 
+import com.jmnoland.expensetrackerapi.models.responses.PaymentTypeActionResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -18,4 +20,6 @@ public interface PaymentTypeMapper {
 
     PaymentType dtoToEntity(PaymentTypeDto obj);
     List<PaymentType> dtoToEntity(List<PaymentTypeDto> list);
+
+    PaymentTypeActionResponse dtoToResponse(PaymentTypeDto obj, List<ValidationError> validationErrors);
 }

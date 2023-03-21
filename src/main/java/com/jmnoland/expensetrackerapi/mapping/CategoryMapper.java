@@ -1,8 +1,10 @@
 package com.jmnoland.expensetrackerapi.mapping;
 
 import com.jmnoland.expensetrackerapi.models.dtos.CategoryDto;
+import com.jmnoland.expensetrackerapi.models.dtos.ValidationError;
 import com.jmnoland.expensetrackerapi.models.entities.Category;
 
+import com.jmnoland.expensetrackerapi.models.responses.CategoryActionResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -18,4 +20,6 @@ public interface CategoryMapper {
 
     Category dtoToEntity(CategoryDto obj);
     List<Category> dtoToEntity(List<CategoryDto> list);
+
+    CategoryActionResponse dtoToResponse(CategoryDto obj, List<ValidationError> validationErrors);
 }

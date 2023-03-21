@@ -1,7 +1,9 @@
 package com.jmnoland.expensetrackerapi.mapping;
 
 import com.jmnoland.expensetrackerapi.models.dtos.LineItemDto;
+import com.jmnoland.expensetrackerapi.models.dtos.ValidationError;
 import com.jmnoland.expensetrackerapi.models.entities.LineItem;
+import com.jmnoland.expensetrackerapi.models.responses.LineItemActionResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -15,4 +17,6 @@ public interface LineItemMapper {
 
     LineItem dtoToEntity(LineItemDto obj);
     List<LineItem> dtoToEntity(List<LineItemDto> list);
+
+    LineItemActionResponse dtoToResponse(LineItemDto obj, List<ValidationError> validationErrors);
 }

@@ -4,6 +4,7 @@ import com.jmnoland.expensetrackerapi.models.dtos.ExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import com.jmnoland.expensetrackerapi.models.requests.BulkCreateUpdateExpenseRequest;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
+import com.jmnoland.expensetrackerapi.models.responses.ExpenseActionResponse;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface ExpenseServiceInterface {
 
     ServiceResponse<List<ExpenseDto>> getExpenses(String clientId);
 
-    ServiceResponse<ExpenseDto> createExpense(CreateUpdateExpenseRequest payload);
+    ExpenseActionResponse createExpense(CreateUpdateExpenseRequest payload);
 
-    ServiceResponse<List<ExpenseDto>> createBulkExpense(BulkCreateUpdateExpenseRequest payload);
+    List<ExpenseActionResponse> createBulkExpense(BulkCreateUpdateExpenseRequest payload);
 
     ServiceResponse<ExpenseDto> insert(ExpenseDto expense);
 
@@ -21,7 +22,7 @@ public interface ExpenseServiceInterface {
 
     void delete(String expenseId, String clientId);
 
-    ServiceResponse<ExpenseDto> updateExpense(CreateUpdateExpenseRequest payload);
+    ExpenseActionResponse updateExpense(CreateUpdateExpenseRequest payload);
 
     ServiceResponse<ExpenseDto> update(ExpenseDto expense);
 }

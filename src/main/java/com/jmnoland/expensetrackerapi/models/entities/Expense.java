@@ -88,6 +88,8 @@ public class Expense {
         return recurringExpenseId;
     }
 
+    public String getExpenseId() { return this.expenseId; }
+
     public void setRecurringExpenseId(String recurringExpenseId) {
         this.recurringExpenseId = recurringExpenseId;
     }

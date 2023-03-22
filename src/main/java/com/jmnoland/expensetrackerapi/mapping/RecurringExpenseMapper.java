@@ -1,11 +1,12 @@
 package com.jmnoland.expensetrackerapi.mapping;
 
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
+import com.jmnoland.expensetrackerapi.models.dtos.ValidationError;
 import com.jmnoland.expensetrackerapi.models.entities.RecurringExpense;
 
+import com.jmnoland.expensetrackerapi.models.responses.RecurringExpenseActionResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface RecurringExpenseMapper {
 
     RecurringExpense dtoToEntity(RecurringExpenseDto obj);
     List<RecurringExpense> dtoToEntity(List<RecurringExpenseDto> list);
+
+    RecurringExpenseActionResponse dtoToResponse(RecurringExpenseDto obj, List<ValidationError> validationErrors);
 }

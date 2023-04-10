@@ -35,6 +35,8 @@ public class PaymentType {
         return clientId;
     }
 
+    public String getPaymentTypeId() { return paymentTypeId; }
+
     public void setClientId(String clientId) {
         this.clientId = clientId;
     }

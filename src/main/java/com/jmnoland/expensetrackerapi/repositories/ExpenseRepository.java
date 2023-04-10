@@ -4,6 +4,7 @@ import com.jmnoland.expensetrackerapi.database.mongodb.ExpenseDAO;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.ExpenseRepositoryInterface;
 import com.jmnoland.expensetrackerapi.models.entities.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class ExpenseRepository implements ExpenseRepositoryInterface {
     }
 
     public List<Expense> getExpenses(String clientId) {
-        return this.expenseDao.findExpensesByClientId(clientId);
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        return this.expenseDao.findExpensesByClientId(clientId, sort);
     }
 
     public boolean expenseExists(String expenseId) {

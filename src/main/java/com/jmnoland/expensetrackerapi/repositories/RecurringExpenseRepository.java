@@ -4,6 +4,7 @@ import com.jmnoland.expensetrackerapi.database.mongodb.RecurringExpenseDAO;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.RecurringExpenseRepositoryInterface;
 import com.jmnoland.expensetrackerapi.models.entities.RecurringExpense;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +20,8 @@ public class RecurringExpenseRepository implements RecurringExpenseRepositoryInt
     }
 
     public List<RecurringExpense> getRecurringExpenses(String clientId) {
-        return this.recurringExpenseDAO.findRecurringExpensesByClientId(clientId);
+        Sort sort = Sort.by(Sort.Direction.DESC, "startDate");
+        return this.recurringExpenseDAO.findRecurringExpensesByClientId(clientId, sort);
     }
 
     public boolean recurringExpenseExists(String recurringExpenseId) {

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -30,12 +31,17 @@ public class ReportingDataRepository implements ReportingDataRepositoryInterface
                     UUID.randomUUID().toString(),
                     clientId,
                     0f,
-                    ReportingDataType.MONTH_TOTAL.toString(),
+                    dataType.toString(),
                     0,
                     0,
                     new Date(0)
             );
         }
         return data.getContent().get(0);
+    }
+
+    public List<ReportingData> findReportingDataBetween(String clientId, Date startDate, Date endDate, ReportingDataType dataType) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "createdAt");
+        return this.reportingDataDAO.findReportingDataBetween(clientId, startDate, endDate, dataType, sort);
     }
 }

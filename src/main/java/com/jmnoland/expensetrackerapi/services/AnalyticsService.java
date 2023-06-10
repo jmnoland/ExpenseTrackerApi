@@ -11,7 +11,7 @@ import com.jmnoland.expensetrackerapi.models.enums.ReportingDataType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -40,9 +40,11 @@ public class AnalyticsService implements AnalyticsServiceInterface {
         List<ReportingData> reportingDataList = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(expenseList.get(0).getDate());
+        String dataTypeString = ReportingDataType.MONTH_TOTAL.toString();
 
         Float total = 0f;
-        for (Expense expense : expenseList) {
+        for (int i = 0; i < expenseList.size(); i++) {
+            Expense expense = expenseList.get(i);
             Calendar expenseDate = Calendar.getInstance();
             expenseDate.setTime(expense.getDate());
 
@@ -51,7 +53,7 @@ public class AnalyticsService implements AnalyticsServiceInterface {
                         UUID.randomUUID().toString(),
                         clientId,
                         total,
-                        ReportingDataType.MONTH_TOTAL.toString(),
+                        dataTypeString,
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         this.dateProvider.getDateNow().getTime()
@@ -64,11 +66,68 @@ public class AnalyticsService implements AnalyticsServiceInterface {
 
         return new ServiceResponse<>("Monthly totals created", true);
     }
-    public ServiceResponse<String> CalculateThreeMonthAverages() {
+    public ServiceResponse<String> CalculateThreeMonthAverages(String clientId, Date startDate, Date endDate) {
+        ReportingDataType dataType = ReportingDataType.MONTH_TOTAL;
+        List<ReportingData> pastDataList = this.reportingDataRepository
+                .findReportingDataBetween(clientId, startDate, endDate, dataType);
+
+        List<ReportingData> reportingDataList = new ArrayList<>();
+        String dataTypeString = ReportingDataType.THREE_MONTH_AVERAGE.toString();
+
+        for (int i = 0; i < pastDataList.size(); i++) {
+            if (i > 1) {
+                ReportingData twoMonthPrevData = pastDataList.get(i - 2);
+                ReportingData prevMonthData = pastDataList.get(i - 1);
+                ReportingData currentMonthData = pastDataList.get(i);
+
+                Float threeMonthAvg = (
+                    twoMonthPrevData.getAmount() + prevMonthData.getAmount() + currentMonthData.getAmount()
+                ) / 3;
+                reportingDataList.add(new ReportingData(
+                        UUID.randomUUID().toString(),
+                        clientId,
+                        threeMonthAvg,
+                        dataTypeString,
+                        currentMonthData.getYear(),
+                        currentMonthData.getMonth(),
+                        this.dateProvider.getDateNow().getTime()
+                ));
+            }
+        }
 
         return new ServiceResponse<>("Three month averages created", true);
     }
-    public ServiceResponse<String> CalculateFiveMonthAverages() {
+    public ServiceResponse<String> CalculateFiveMonthAverages(String clientId, Date startDate, Date endDate) {
+        ReportingDataType dataType = ReportingDataType.MONTH_TOTAL;
+        List<ReportingData> pastDataList = this.reportingDataRepository
+                .findReportingDataBetween(clientId, startDate, endDate, dataType);
+
+        List<ReportingData> reportingDataList = new ArrayList<>();
+        String dataTypeString = ReportingDataType.FIVE_MONTH_AVERAGE.toString();
+
+        for (int i = 0; i < pastDataList.size(); i++) {
+            if (i > 3) {
+                ReportingData fourMonthPrevData = pastDataList.get(i - 4);
+                ReportingData threeMonthPrevData = pastDataList.get(i - 3);
+                ReportingData twoMonthPrevData = pastDataList.get(i - 2);
+                ReportingData prevMonthData = pastDataList.get(i - 1);
+                ReportingData currentMonthData = pastDataList.get(i);
+
+                Float fiveMonthAvg = (
+                        fourMonthPrevData.getAmount() + threeMonthPrevData.getAmount() +
+                        twoMonthPrevData.getAmount() + prevMonthData.getAmount() + currentMonthData.getAmount()
+                ) / 5;
+                reportingDataList.add(new ReportingData(
+                        UUID.randomUUID().toString(),
+                        clientId,
+                        fiveMonthAvg,
+                        dataTypeString,
+                        currentMonthData.getYear(),
+                        currentMonthData.getMonth(),
+                        this.dateProvider.getDateNow().getTime()
+                ));
+            }
+        }
 
         return new ServiceResponse<>("Five month averages created", true);
     }

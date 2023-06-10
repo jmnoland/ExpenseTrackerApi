@@ -2,10 +2,15 @@ package com.jmnoland.expensetrackerapi.services;
 
 import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.ApiKeyRepositoryInterface;
+import com.jmnoland.expensetrackerapi.interfaces.repositories.ExpenseRepositoryInterface;
+import com.jmnoland.expensetrackerapi.interfaces.repositories.ReportingDataRepositoryInterface;
+import com.jmnoland.expensetrackerapi.interfaces.services.AnalyticsServiceInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.ExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.RecurringExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
+import com.jmnoland.expensetrackerapi.models.entities.ReportingData;
+import com.jmnoland.expensetrackerapi.models.enums.ReportingDataType;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,19 +23,25 @@ public class SchedulerService {
     private final RecurringExpenseServiceInterface recurringExpenseService;
     private final ExpenseServiceInterface expenseService;
     private final ApiKeyRepositoryInterface apiKeyRepository;
+    private final ReportingDataRepositoryInterface reportingDataRepository;
+    private final AnalyticsServiceInterface analyticsService;
     private final DateProviderInterface dateProvider;
 
     public SchedulerService(RecurringExpenseServiceInterface recurringExpenseService,
                             ExpenseServiceInterface expenseService,
                             ApiKeyRepositoryInterface apiKeyRepository,
+                            ReportingDataRepositoryInterface reportingDataRepository,
+                            AnalyticsServiceInterface analyticsService,
                             DateProviderInterface dateProvider) {
         this.recurringExpenseService = recurringExpenseService;
         this.expenseService = expenseService;
         this.apiKeyRepository = apiKeyRepository;
+        this.reportingDataRepository = reportingDataRepository;
+        this.analyticsService = analyticsService;
         this.dateProvider = dateProvider;
     }
     @Scheduled(cron = "0 0 12 * * ?")
-    public void scheduleTask()
+    public void CreateRecurringExpenses()
     {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
         for(String id : clientIdList) {
@@ -43,6 +54,30 @@ public class SchedulerService {
                 this.expenseService.createExpense(request);
             }
         }
+    }
+    @Scheduled(fixedRate = 1000)
+    public void CreateMonthlyReportingData() {
+        List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
+        for(String id : clientIdList) {
+            ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.MONTH_TOTAL);
+            this.analyticsService.CalculateMonthlyTotals(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
+        }
+    }
+    @Scheduled(cron = "0 0 0 1 * ?")
+    public void CreateThreeMonthAverageReportingData() {
+//        List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
+//        for(String id : clientIdList) {
+//            ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.THREE_MONTH_AVERAGE);
+//            this.analyticsService.CalculateThreeMonthAverages(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
+//        }
+    }
+    @Scheduled(cron = "0 0 0 1 * ?")
+    public void CreateFiveMonthAverageReportingData() {
+//        List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
+//        for(String id : clientIdList) {
+//            ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.FIVE_MONTH_AVERAGE);
+//            this.analyticsService.CalculateFiveMonthAverages(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
+//        }
     }
 
     public List<CreateUpdateExpenseRequest> CreatePendingExpenses(List<RecurringExpenseDto> recurExpenseList) {

@@ -2,7 +2,7 @@ package com.jmnoland.expensetrackerapi.interfaces.repositories;
 
 import com.jmnoland.expensetrackerapi.models.entities.Expense;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

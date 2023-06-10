@@ -5,7 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,5 +17,5 @@ public interface ExpenseDAO extends MongoRepository<Expense, String> {
     Optional<Expense> findExpenseById(String clientId, String expenseId);
 
     @Query("{'clientId' : ?0, 'date' : { '$gte': ?1, '$lt': ?2 } }")
-    List<Expense> findExpenseBetween(String clientId, Date startDate, Date endDate);
+    List<Expense> findExpenseBetween(String clientId, Date startDate, Date endDate, Sort sort);
 }

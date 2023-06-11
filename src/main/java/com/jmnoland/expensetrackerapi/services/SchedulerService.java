@@ -2,7 +2,6 @@ package com.jmnoland.expensetrackerapi.services;
 
 import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.ApiKeyRepositoryInterface;
-import com.jmnoland.expensetrackerapi.interfaces.repositories.ExpenseRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.ReportingDataRepositoryInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.AnalyticsServiceInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.ExpenseServiceInterface;
@@ -55,7 +54,7 @@ public class SchedulerService {
             }
         }
     }
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void CreateMonthlyReportingData() {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
         for(String id : clientIdList) {
@@ -65,19 +64,19 @@ public class SchedulerService {
     }
     @Scheduled(cron = "0 0 0 1 * ?")
     public void CreateThreeMonthAverageReportingData() {
-//        List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
-//        for(String id : clientIdList) {
-//            ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.THREE_MONTH_AVERAGE);
-//            this.analyticsService.CalculateThreeMonthAverages(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
-//        }
+        List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
+        for(String id : clientIdList) {
+            ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.THREE_MONTH_AVERAGE);
+            this.analyticsService.CalculateThreeMonthAverages(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
+        }
     }
     @Scheduled(cron = "0 0 0 1 * ?")
     public void CreateFiveMonthAverageReportingData() {
-//        List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
-//        for(String id : clientIdList) {
-//            ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.FIVE_MONTH_AVERAGE);
-//            this.analyticsService.CalculateFiveMonthAverages(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
-//        }
+        List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
+        for(String id : clientIdList) {
+            ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.FIVE_MONTH_AVERAGE);
+            this.analyticsService.CalculateFiveMonthAverages(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
+        }
     }
 
     public List<CreateUpdateExpenseRequest> CreatePendingExpenses(List<RecurringExpenseDto> recurExpenseList) {

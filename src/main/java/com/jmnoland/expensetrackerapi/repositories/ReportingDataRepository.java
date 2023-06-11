@@ -44,4 +44,12 @@ public class ReportingDataRepository implements ReportingDataRepositoryInterface
         Sort sort = Sort.by(Sort.Direction.ASC, "createdAt");
         return this.reportingDataDAO.findReportingDataBetween(clientId, startDate, endDate, dataType, sort);
     }
+
+    public void insert(ReportingData reportingData) {
+        this.reportingDataDAO.insert(reportingData);
+    }
+
+    public void bulkInsert(List<ReportingData> reportingDataList) {
+        this.reportingDataDAO.insert(reportingDataList);
+    }
 }

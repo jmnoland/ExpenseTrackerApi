@@ -43,11 +43,9 @@ public class AnalyticsService implements AnalyticsServiceInterface {
         String dataTypeString = ReportingDataType.MONTH_TOTAL.toString();
 
         Float total = 0f;
-        for (int i = 0; i < expenseList.size(); i++) {
-            Expense expense = expenseList.get(i);
+        for (Expense expense : expenseList) {
             Calendar expenseDate = Calendar.getInstance();
             expenseDate.setTime(expense.getDate());
-
             if (expenseDate.get(Calendar.MONTH) != calendar.get(Calendar.MONTH)) {
                 reportingDataList.add(new ReportingData(
                         UUID.randomUUID().toString(),
@@ -55,7 +53,7 @@ public class AnalyticsService implements AnalyticsServiceInterface {
                         total,
                         dataTypeString,
                         calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.MONTH) + 1,
                         this.dateProvider.getDateNow().getTime()
                 ));
                 total = 0f;
@@ -64,6 +62,7 @@ public class AnalyticsService implements AnalyticsServiceInterface {
             total += expense.getAmount();
         }
 
+        this.reportingDataRepository.bulkInsert(reportingDataList);
         return new ServiceResponse<>("Monthly totals created", true);
     }
     public ServiceResponse<String> CalculateThreeMonthAverages(String clientId, Date startDate, Date endDate) {
@@ -95,6 +94,7 @@ public class AnalyticsService implements AnalyticsServiceInterface {
             }
         }
 
+        this.reportingDataRepository.bulkInsert(reportingDataList);
         return new ServiceResponse<>("Three month averages created", true);
     }
     public ServiceResponse<String> CalculateFiveMonthAverages(String clientId, Date startDate, Date endDate) {
@@ -129,6 +129,7 @@ public class AnalyticsService implements AnalyticsServiceInterface {
             }
         }
 
+        this.reportingDataRepository.bulkInsert(reportingDataList);
         return new ServiceResponse<>("Five month averages created", true);
     }
 }

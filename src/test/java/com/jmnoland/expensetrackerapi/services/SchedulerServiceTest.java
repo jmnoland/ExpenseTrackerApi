@@ -2,12 +2,15 @@ package com.jmnoland.expensetrackerapi.services;
 
 import com.jmnoland.expensetrackerapi.interfaces.providers.DateProviderInterface;
 import com.jmnoland.expensetrackerapi.interfaces.repositories.ApiKeyRepositoryInterface;
+import com.jmnoland.expensetrackerapi.interfaces.repositories.ReportingDataRepositoryInterface;
+import com.jmnoland.expensetrackerapi.interfaces.services.AnalyticsServiceInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.ExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.interfaces.services.RecurringExpenseServiceInterface;
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import com.jmnoland.expensetrackerapi.models.enums.Frequency;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
+import com.jmnoland.expensetrackerapi.repositories.ReportingDataRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,12 +34,18 @@ public class SchedulerServiceTest {
     private ExpenseServiceInterface expenseService;
     @Mock
     private ApiKeyRepositoryInterface apiKeyRepository;
+    @Mock
+    private ReportingDataRepositoryInterface reportingDataRepository;
+    @Mock
+    private AnalyticsServiceInterface analyticsService;
 
     @Before
     public void Setup() {
         this.classUnderTest = new SchedulerService(recurringExpenseService,
                 expenseService,
                 apiKeyRepository,
+                reportingDataRepository,
+                analyticsService,
                 dateProvider);
     }
 

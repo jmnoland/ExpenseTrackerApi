@@ -59,7 +59,7 @@ public class SchedulerService {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
         for(String id : clientIdList) {
             ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.MONTH_TOTAL);
-            this.analyticsService.CalculateMonthlyTotals(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
+            this.analyticsService.CalculateMonthlyTotals(id, getStartingDate(response), this.dateProvider.getDateNow().getTime());
         }
     }
     @Scheduled(cron = "0 0 0 1 * ?")
@@ -67,7 +67,7 @@ public class SchedulerService {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
         for(String id : clientIdList) {
             ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.THREE_MONTH_AVERAGE);
-            this.analyticsService.CalculateThreeMonthAverages(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
+            this.analyticsService.CalculateThreeMonthAverages(id, getStartingDate(response), this.dateProvider.getDateNow().getTime());
         }
     }
     @Scheduled(cron = "0 0 0 1 * ?")
@@ -75,8 +75,14 @@ public class SchedulerService {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
         for(String id : clientIdList) {
             ReportingData response = this.reportingDataRepository.findLastReportingData(id, ReportingDataType.FIVE_MONTH_AVERAGE);
-            this.analyticsService.CalculateFiveMonthAverages(id, response.getCreatedAt(), this.dateProvider.getDateNow().getTime());
+            this.analyticsService.CalculateFiveMonthAverages(id, getStartingDate(response), this.dateProvider.getDateNow().getTime());
         }
+    }
+
+    private Date getStartingDate(ReportingData obj) {
+        Calendar cal = dateProvider.calendarDateFromParts(obj.getYear(), obj.getMonth(), 1);
+        cal.add(Calendar.MONTH, 1);
+        return cal.getTime();
     }
 
     public List<CreateUpdateExpenseRequest> CreatePendingExpenses(List<RecurringExpenseDto> recurExpenseList) {

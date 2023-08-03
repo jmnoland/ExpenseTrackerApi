@@ -14,15 +14,17 @@ public class ReportingData {
     private String dataType;
     private int year;
     private int month;
+    private Date date;
     private final Date createdAt;
 
-    public ReportingData(String dataId, String clientId, Float amount, String dataType, int year, int month, Date createdAt) {
+    public ReportingData(String dataId, String clientId, Float amount, String dataType, int year, int month, Date date, Date createdAt) {
         this.dataId = dataId;
         this.clientId = clientId;
         this.amount = amount;
         this.dataType = dataType;
         this.year = year;
         this.month = month;
+        this.date = date;
         this.createdAt = createdAt;
     }
 
@@ -55,4 +57,6 @@ public class ReportingData {
     public void setMonth(int month) {
         this.month = month;
     }
+    public Date getDate() { return date; }
+    public void setDate(Date date) { this.date = date; }
 }

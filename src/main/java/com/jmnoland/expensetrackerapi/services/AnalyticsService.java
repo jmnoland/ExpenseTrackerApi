@@ -47,13 +47,17 @@ public class AnalyticsService implements AnalyticsServiceInterface {
             Calendar expenseDate = Calendar.getInstance();
             expenseDate.setTime(expense.getDate());
             if (expenseDate.get(Calendar.MONTH) != calendar.get(Calendar.MONTH)) {
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                Date date = this.dateProvider.calendarDateFromParts(year, month, 15).getTime();
                 reportingDataList.add(new ReportingData(
                         UUID.randomUUID().toString(),
                         clientId,
                         total,
                         dataTypeString,
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH) + 1,
+                        year,
+                        month + 1,
+                        date,
                         this.dateProvider.getDateNow().getTime()
                 ));
                 total = 0f;
@@ -82,13 +86,17 @@ public class AnalyticsService implements AnalyticsServiceInterface {
                 Float threeMonthAvg = (
                     twoMonthPrevData.getAmount() + prevMonthData.getAmount() + currentMonthData.getAmount()
                 ) / 3;
+                int year = currentMonthData.getYear();
+                int month = currentMonthData.getMonth();
+                Date date = this.dateProvider.calendarDateFromParts(year, month, 15).getTime();
                 reportingDataList.add(new ReportingData(
                         UUID.randomUUID().toString(),
                         clientId,
                         threeMonthAvg,
                         dataTypeString,
-                        currentMonthData.getYear(),
-                        currentMonthData.getMonth(),
+                        year,
+                        month,
+                        date,
                         this.dateProvider.getDateNow().getTime()
                 ));
             }
@@ -117,13 +125,17 @@ public class AnalyticsService implements AnalyticsServiceInterface {
                         fourMonthPrevData.getAmount() + threeMonthPrevData.getAmount() +
                         twoMonthPrevData.getAmount() + prevMonthData.getAmount() + currentMonthData.getAmount()
                 ) / 5;
+                int year = currentMonthData.getYear();
+                int month = currentMonthData.getMonth();
+                Date date = this.dateProvider.calendarDateFromParts(year, month, 15).getTime();
                 reportingDataList.add(new ReportingData(
                         UUID.randomUUID().toString(),
                         clientId,
                         fiveMonthAvg,
                         dataTypeString,
-                        currentMonthData.getYear(),
-                        currentMonthData.getMonth(),
+                        year,
+                        month,
+                        date,
                         this.dateProvider.getDateNow().getTime()
                 ));
             }

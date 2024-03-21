@@ -48,7 +48,7 @@ public class AnalyticsService implements AnalyticsServiceInterface {
             expenseDate.setTime(expense.getDate());
             if (expenseDate.get(Calendar.MONTH) != calendar.get(Calendar.MONTH)) {
                 int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
+                int month = calendar.get(Calendar.MONTH) + 1;
                 Date date = this.dateProvider.calendarDateFromParts(year, month, 15).getTime();
                 reportingDataList.add(new ReportingData(
                         UUID.randomUUID().toString(),
@@ -56,7 +56,7 @@ public class AnalyticsService implements AnalyticsServiceInterface {
                         total,
                         dataTypeString,
                         year,
-                        month + 1,
+                        month,
                         date,
                         this.dateProvider.getDateNow().getTime()
                 ));
@@ -87,7 +87,7 @@ public class AnalyticsService implements AnalyticsServiceInterface {
                     twoMonthPrevData.getAmount() + prevMonthData.getAmount() + currentMonthData.getAmount()
                 ) / 3;
                 int year = currentMonthData.getYear();
-                int month = currentMonthData.getMonth();
+                int month = currentMonthData.getMonth() + 1;
                 Date date = this.dateProvider.calendarDateFromParts(year, month, 15).getTime();
                 reportingDataList.add(new ReportingData(
                         UUID.randomUUID().toString(),
@@ -126,7 +126,7 @@ public class AnalyticsService implements AnalyticsServiceInterface {
                         twoMonthPrevData.getAmount() + prevMonthData.getAmount() + currentMonthData.getAmount()
                 ) / 5;
                 int year = currentMonthData.getYear();
-                int month = currentMonthData.getMonth();
+                int month = currentMonthData.getMonth() + 1;
                 Date date = this.dateProvider.calendarDateFromParts(year, month, 15).getTime();
                 reportingDataList.add(new ReportingData(
                         UUID.randomUUID().toString(),

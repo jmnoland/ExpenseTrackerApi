@@ -119,6 +119,7 @@ public class ExpenseService implements ExpenseServiceInterface {
         List<ExpenseActionResponse> response = new ArrayList<>();
 
         for (CreateUpdateExpenseRequest request : payload.expenseRequestList) {
+            if (request.clientId == null) request.clientId = payload.clientId;
             response.add(createExpense(request));
         }
         return response;

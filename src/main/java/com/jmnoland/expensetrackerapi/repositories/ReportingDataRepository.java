@@ -24,7 +24,9 @@ public class ReportingDataRepository implements ReportingDataRepositoryInterface
     }
 
     public ReportingData findLastReportingData(String clientId, ReportingDataType dataType) {
-        PageRequest request = PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "createdAt"));
+        Sort sort = Sort.by(Sort.Direction.DESC, "year")
+                .and(Sort.by(Sort.Direction.DESC, "month"));
+        PageRequest request = PageRequest.of(0, 1, sort);
         Page<ReportingData> data = this.reportingDataDAO.findReportingData(clientId, dataType.toString(), request);
         if (data.getContent().isEmpty()) {
             return new ReportingData(
@@ -34,6 +36,7 @@ public class ReportingDataRepository implements ReportingDataRepositoryInterface
                     dataType.toString(),
                     0,
                     0,
+                    new Date(0),
                     new Date(0)
             );
         }
@@ -41,7 +44,8 @@ public class ReportingDataRepository implements ReportingDataRepositoryInterface
     }
 
     public List<ReportingData> findReportingDataBetween(String clientId, Date startDate, Date endDate, ReportingDataType dataType) {
-        Sort sort = Sort.by(Sort.Direction.ASC, "createdAt");
+        Sort sort = Sort.by(Sort.Direction.ASC, "year")
+                .and(Sort.by(Sort.Direction.ASC, "month"));
         return this.reportingDataDAO.findReportingDataBetween(clientId, startDate, endDate, dataType, sort);
     }
 

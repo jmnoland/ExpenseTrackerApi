@@ -62,7 +62,7 @@ public class SchedulerService {
             this.analyticsService.CalculateMonthlyTotals(id, getStartingDate(response), this.dateProvider.getDateNow().getTime());
         }
     }
-    @Scheduled(cron = "0 0 0 1 * ?")
+    @Scheduled(cron = "0 0 1 1 * ?")
     public void CreateThreeMonthAverageReportingData() {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
         for(String id : clientIdList) {
@@ -70,7 +70,7 @@ public class SchedulerService {
             this.analyticsService.CalculateThreeMonthAverages(id, getStartingDate(response), this.dateProvider.getDateNow().getTime());
         }
     }
-    @Scheduled(cron = "0 0 0 1 * ?")
+    @Scheduled(cron = "0 0 1 1 * ?")
     public void CreateFiveMonthAverageReportingData() {
         List<String> clientIdList = this.apiKeyRepository.getAllClientIds();
         for(String id : clientIdList) {

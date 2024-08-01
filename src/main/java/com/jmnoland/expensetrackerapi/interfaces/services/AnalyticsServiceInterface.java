@@ -6,6 +6,6 @@ import java.util.Date;
 
 public interface AnalyticsServiceInterface {
     ServiceResponse<String> CalculateMonthlyTotals(String clientId, Date startDate, Date endDate);
-    ServiceResponse<String> CalculateThreeMonthAverages(String clientId, Date startDate, Date endDate);
-    ServiceResponse<String> CalculateFiveMonthAverages(String clientId, Date startDate, Date endDate);
+    ServiceResponse<String> CalculateThreeMonthAverages(String clientId, Date prevStartDate, Date endDate);
+    ServiceResponse<String> CalculateFiveMonthAverages(String clientId, Date prevStartDate, Date endDate);
 }

@@ -11,11 +11,7 @@ import com.jmnoland.expensetrackerapi.models.enums.ReportingDataType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AnalyticsService implements AnalyticsServiceInterface {
@@ -69,8 +65,10 @@ public class AnalyticsService implements AnalyticsServiceInterface {
         this.reportingDataRepository.bulkInsert(reportingDataList);
         return new ServiceResponse<>("Monthly totals created", true);
     }
-    public ServiceResponse<String> CalculateThreeMonthAverages(String clientId, Date startDate, Date endDate) {
+    public ServiceResponse<String> CalculateThreeMonthAverages(String clientId, Date prevStartDate, Date endDate) {
         ReportingDataType dataType = ReportingDataType.MONTH_TOTAL;
+        Date startDate = this.dateProvider.addMonths(prevStartDate, -3);
+
         List<ReportingData> pastDataList = this.reportingDataRepository
                 .findReportingDataBetween(clientId, startDate, endDate, dataType);
 
@@ -105,8 +103,10 @@ public class AnalyticsService implements AnalyticsServiceInterface {
         this.reportingDataRepository.bulkInsert(reportingDataList);
         return new ServiceResponse<>("Three month averages created", true);
     }
-    public ServiceResponse<String> CalculateFiveMonthAverages(String clientId, Date startDate, Date endDate) {
+    public ServiceResponse<String> CalculateFiveMonthAverages(String clientId, Date prevStartDate, Date endDate) {
         ReportingDataType dataType = ReportingDataType.MONTH_TOTAL;
+        Date startDate = this.dateProvider.addMonths(prevStartDate, -5);
+
         List<ReportingData> pastDataList = this.reportingDataRepository
                 .findReportingDataBetween(clientId, startDate, endDate, dataType);
 

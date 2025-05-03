@@ -26,6 +26,8 @@ import com.jmnoland.expensetrackerapi.validators.linitems.LineItemValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -38,6 +40,7 @@ public class ExpenseService implements ExpenseServiceInterface {
     private final ExpenseMapper expenseMapper;
     private final LineItemMapper lineItemMapper;
     private final DateProviderInterface dateProvider;
+    private final SimpleDateFormat dateFormatter;
 
     @Autowired
     public ExpenseService(ExpenseRepositoryInterface expenseRepository,
@@ -54,6 +57,7 @@ public class ExpenseService implements ExpenseServiceInterface {
         this.expenseMapper = expenseMapper;
         this.lineItemMapper = lineItemMapper;
         this.dateProvider = dateProvider;
+        this.dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     }
 
     public ServiceResponse<List<ExpenseDto>> getExpenses(String clientId) {
@@ -61,6 +65,30 @@ public class ExpenseService implements ExpenseServiceInterface {
         List<ExpenseDto> list = this.expenseMapper.entityToDto(existingExpenses);
 
         return new ServiceResponse<>(list, true);
+    }
+
+    public ServiceResponse<List<ExpenseDto>> getExpensesBetween(String clientId, String startDate, String endDate) {
+        try {
+            Date start = this.dateFormatter.parse(startDate);
+            Date end = this.dateFormatter.parse(endDate);
+
+            List<Expense> existingExpenses = this.expenseRepository.getExpensesDateBetween(clientId, start, end);
+            List<ExpenseDto> list = this.expenseMapper.entityToDto(existingExpenses);
+
+            return new ServiceResponse<>(list, true);
+        } catch (ParseException ex) {
+            return new ServiceResponse<>(null, false);
+        }
+    }
+
+    public ServiceResponse<ExpenseDto> getExpenseById(String expenseId, String clientId) {
+        Optional<Expense> existingExpense = this.expenseRepository.getExpense(expenseId, clientId);
+        if (existingExpense.isPresent()) {
+            ExpenseDto expense = this.expenseMapper.entityToDto(existingExpense.get());
+
+            return new ServiceResponse<>(expense, true);
+        }
+        return new ServiceResponse<>(null, false);
     }
 
     public ExpenseActionResponse createExpense(CreateUpdateExpenseRequest payload) {

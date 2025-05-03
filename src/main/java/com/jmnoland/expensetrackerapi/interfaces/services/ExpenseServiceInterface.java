@@ -12,6 +12,10 @@ public interface ExpenseServiceInterface {
 
     ServiceResponse<List<ExpenseDto>> getExpenses(String clientId);
 
+    ServiceResponse<List<ExpenseDto>> getExpensesBetween(String clientId, String startDate, String endDate);
+
+    ServiceResponse<ExpenseDto> getExpenseById(String expenseId, String clientId);
+
     ExpenseActionResponse createExpense(CreateUpdateExpenseRequest payload);
 
     List<ExpenseActionResponse> createBulkExpense(BulkCreateUpdateExpenseRequest payload);

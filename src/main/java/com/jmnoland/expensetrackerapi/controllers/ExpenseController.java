@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/expense")
@@ -27,9 +28,21 @@ public class ExpenseController {
     }
 
     @GetMapping()
-    public ServiceResponse<List<ExpenseDto>> getExpenses() {
+    public ServiceResponse<List<ExpenseDto>> getExpenses(@RequestParam Map<String, String> queryParameters) {
         String clientId = RequestHelper.getClientIdFromHeader(this.request);
         return this.expenseService.getExpenses(clientId);
+    }
+
+    @GetMapping("between")
+    public ServiceResponse<List<ExpenseDto>> getExpensesBetweenDates(@RequestParam("start") String startDate, @RequestParam("end") String endDate) {
+        String clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.expenseService.getExpensesBetween(clientId, startDate, endDate);
+    }
+
+    @GetMapping("id")
+    public ServiceResponse<ExpenseDto> getExpenseById(String expenseId) {
+        String clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.expenseService.getExpenseById(expenseId, clientId);
     }
 
     @PostMapping()

@@ -3,7 +3,6 @@ package com.jmnoland.expensetrackerapi.helpers;
 import com.jmnoland.expensetrackerapi.models.dtos.ValidateApiKeyDto;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -39,7 +38,7 @@ public class ApiKeyHelper {
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[keyLen/8];
         random.nextBytes(bytes);
-        return DatatypeConverter.printHexBinary(bytes);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     public static String hashSecret(String secret) throws NoSuchAlgorithmException {

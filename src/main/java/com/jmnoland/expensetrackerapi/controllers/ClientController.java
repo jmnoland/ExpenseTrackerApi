@@ -7,7 +7,7 @@ import com.jmnoland.expensetrackerapi.models.responses.ApiKeyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("api/client")

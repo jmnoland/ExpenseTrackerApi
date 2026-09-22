@@ -17,14 +17,12 @@ import org.springframework.stereotype.Service;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-@Service
 public class IdentityAuthenticationService implements AuthenticationServiceInterface {
 
     private final ApiKeyRepositoryInterface apiKeyRepository;
     private final DateProviderInterface dateProvider;
     private final ApiKeyMapper mapper;
 
-    @Autowired
     public IdentityAuthenticationService(ApiKeyRepositoryInterface apiKeyRepository,
                                  DateProviderInterface dateProvider,
                                  ApiKeyMapper mapper) {

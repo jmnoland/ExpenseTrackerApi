@@ -2,20 +2,35 @@ name: Publish Docker image
 
 on:
   push:
-    branches: master
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  REGISTRY: index.docker.io
+  IMAGE_NAME: jmnoland/expense-tracker-api
 
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    environment: production
     permissions:
-      packages: write
       contents: read
       attestations: write
       id-token: write
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure tag is on master
+        run: |
+          git fetch origin master
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/master; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not point to a commit on master"
+            exit 1
+          fi
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -27,7 +42,11 @@ jobs:
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: jmnoland/expense-tracker-api
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
 
       - name: Build and push Docker image
         id: push
@@ -42,6 +61,6 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true

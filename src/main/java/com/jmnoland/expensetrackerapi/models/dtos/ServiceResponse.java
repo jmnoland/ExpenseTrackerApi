@@ -1,6 +1,6 @@
 package com.jmnoland.expensetrackerapi.models.dtos;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 

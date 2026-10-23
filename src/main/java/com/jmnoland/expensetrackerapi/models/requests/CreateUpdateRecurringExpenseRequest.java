@@ -1,6 +1,7 @@
 package com.jmnoland.expensetrackerapi.models.requests;
 
 import com.jmnoland.expensetrackerapi.models.enums.Frequency;
+import com.jmnoland.expensetrackerapi.models.enums.RecurringExpenseType;
 import com.mongodb.lang.Nullable;
 
 import java.util.Date;
@@ -20,5 +21,6 @@ public class CreateUpdateRecurringExpenseRequest {
     @Nullable
     public Date lastExpenseDate;
     public Frequency frequency;
+    public RecurringExpenseType type;
     public CreateUpdateRecurringExpenseRequest() {}
 }

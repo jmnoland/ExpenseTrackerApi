@@ -3,6 +3,7 @@ package com.jmnoland.expensetrackerapi.interfaces.services;
 import com.jmnoland.expensetrackerapi.models.dtos.ExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import com.jmnoland.expensetrackerapi.models.requests.BulkCreateUpdateExpenseRequest;
+import com.jmnoland.expensetrackerapi.models.requests.ConfirmExpenseRequest;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
 import com.jmnoland.expensetrackerapi.models.responses.ExpenseActionResponse;
 
@@ -29,4 +30,8 @@ public interface ExpenseServiceInterface {
     ExpenseActionResponse updateExpense(CreateUpdateExpenseRequest payload);
 
     ServiceResponse<ExpenseDto> update(ExpenseDto expense);
+
+    ExpenseActionResponse confirmExpense(ConfirmExpenseRequest payload);
+
+    ServiceResponse<ExpenseDto> confirm(String expenseId, String clientId, Float amount);
 }

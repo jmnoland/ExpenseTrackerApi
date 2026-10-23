@@ -54,7 +54,8 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
                 request.endDate,
                 request.frequency,
                 request.amount,
-                request.lastExpenseDate
+                request.lastExpenseDate,
+                request.type
         );
 
         return insert(recurringExpense);
@@ -100,7 +101,8 @@ public class RecurringExpenseService implements RecurringExpenseServiceInterface
                 request.endDate,
                 request.frequency,
                 request.amount,
-                request.lastExpenseDate
+                request.lastExpenseDate,
+                request.type
         );
 
         return update(recurringExpense);

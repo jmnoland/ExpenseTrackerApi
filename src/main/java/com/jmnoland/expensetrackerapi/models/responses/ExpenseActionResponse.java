@@ -16,6 +16,7 @@ public class ExpenseActionResponse {
     public Float amount;
     @Nullable
     public String recurringExpenseId;
+    public boolean confirmed;
     @Nullable
     public List<LineItemActionResponse> lineItems;
 

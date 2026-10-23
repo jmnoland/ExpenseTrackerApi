@@ -5,6 +5,7 @@ import com.jmnoland.expensetrackerapi.interfaces.services.ExpenseServiceInterfac
 import com.jmnoland.expensetrackerapi.models.dtos.ExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import com.jmnoland.expensetrackerapi.models.requests.BulkCreateUpdateExpenseRequest;
+import com.jmnoland.expensetrackerapi.models.requests.ConfirmExpenseRequest;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
 import com.jmnoland.expensetrackerapi.models.responses.ExpenseActionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,12 @@ public class ExpenseController {
     public ExpenseActionResponse updateExpense(@RequestBody CreateUpdateExpenseRequest payload) {
         payload.clientId = RequestHelper.getClientIdFromHeader(this.request);
         return this.expenseService.updateExpense(payload);
+    }
+
+    @PatchMapping("confirm")
+    public ExpenseActionResponse confirmExpense(@RequestBody ConfirmExpenseRequest payload) {
+        payload.clientId = RequestHelper.getClientIdFromHeader(this.request);
+        return this.expenseService.confirmExpense(payload);
     }
 
     @DeleteMapping()

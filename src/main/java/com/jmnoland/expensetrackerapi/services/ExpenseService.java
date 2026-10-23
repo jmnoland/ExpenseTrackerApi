@@ -16,10 +16,12 @@ import com.jmnoland.expensetrackerapi.models.dtos.ValidationError;
 import com.jmnoland.expensetrackerapi.models.entities.Expense;
 import com.jmnoland.expensetrackerapi.models.entities.LineItem;
 import com.jmnoland.expensetrackerapi.models.requests.BulkCreateUpdateExpenseRequest;
+import com.jmnoland.expensetrackerapi.models.requests.ConfirmExpenseRequest;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateLineItemRequest;
 import com.jmnoland.expensetrackerapi.models.responses.ExpenseActionResponse;
 import com.jmnoland.expensetrackerapi.models.responses.LineItemActionResponse;
+import com.jmnoland.expensetrackerapi.validators.expense.ConfirmExpenseValidator;
 import com.jmnoland.expensetrackerapi.validators.expense.CreateExpenseValidator;
 import com.jmnoland.expensetrackerapi.validators.expense.UpdateExpenseValidator;
 import com.jmnoland.expensetrackerapi.validators.linitems.LineItemValidator;
@@ -108,7 +110,8 @@ public class ExpenseService implements ExpenseServiceInterface {
                 payload.name,
                 useDate,
                 totalAmount,
-                payload.recurringExpenseId
+                payload.recurringExpenseId,
+                payload.confirmed == null || payload.confirmed
         );
 
         ServiceResponse<ExpenseDto> insertResult = insert(expenseDto);
@@ -210,7 +213,8 @@ public class ExpenseService implements ExpenseServiceInterface {
                 payload.name,
                 useDate,
                 payload.amount,
-                null
+                null,
+                payload.confirmed == null || payload.confirmed
         );
         ServiceResponse<ExpenseDto> updateResponse = update(expenseDto);
         return this.expenseMapper.dtoToResponse(expenseDto, null, updateResponse.validationErrors);
@@ -237,6 +241,37 @@ public class ExpenseService implements ExpenseServiceInterface {
         return new ServiceResponse<>(
                 this.expenseMapper.entityToDto(updatedExpense),
                 validationErrors.isEmpty(),
+                validationErrors
+        );
+    }
+
+    public ExpenseActionResponse confirmExpense(ConfirmExpenseRequest payload) {
+        ServiceResponse<ExpenseDto> confirmResponse = confirm(payload.expenseId, payload.clientId, payload.amount);
+        return this.expenseMapper.dtoToResponse(confirmResponse.responseObject, null, confirmResponse.validationErrors);
+    }
+
+    public ServiceResponse<ExpenseDto> confirm(String expenseId, String clientId, Float amount) {
+        Optional<Expense> existing = this.expenseRepository.getExpense(expenseId, clientId);
+
+        List<ValidationError> validationErrors = new ConfirmExpenseValidator()
+                .validate(amount, existing.orElse(null));
+
+        if (!validationErrors.isEmpty()) {
+            return new ServiceResponse<>(null, false, validationErrors);
+        }
+
+        Expense expense = existing.get();
+        expense.setAmount(amount);
+        expense.setConfirmed(true);
+        try {
+            this.expenseRepository.update(expense);
+        } catch (Exception e) {
+            return new ServiceResponse<>(null, false);
+        }
+
+        return new ServiceResponse<>(
+                this.expenseMapper.entityToDto(expense),
+                true,
                 validationErrors
         );
     }

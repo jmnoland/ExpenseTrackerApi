@@ -61,6 +61,12 @@ public class CreateRecurringExpenseValidator {
                     "The date is required"
             ));
         }
+        if (recurringExpense.type == null) {
+            validationErrors.add(new ValidationError(
+                    "Type",
+                    "The type is required"
+            ));
+        }
 
         if (recurringExpense.endDate != null && recurringExpense.startDate != null) {
             int compareResult = recurringExpense.endDate.compareTo(recurringExpense.startDate);

@@ -9,6 +9,7 @@ import com.jmnoland.expensetrackerapi.interfaces.services.RecurringExpenseServic
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import com.jmnoland.expensetrackerapi.models.entities.ReportingData;
+import com.jmnoland.expensetrackerapi.models.enums.RecurringExpenseType;
 import com.jmnoland.expensetrackerapi.models.enums.ReportingDataType;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -153,6 +154,7 @@ public class SchedulerService {
         expenseRequest.date = currentTime;
         expenseRequest.amount = recurringExpense.amount;
         expenseRequest.recurringExpenseId = recurringExpense.recurringExpenseId;
+        expenseRequest.confirmed = recurringExpense.type != RecurringExpenseType.VARIABLE;
         return expenseRequest;
     }
 }

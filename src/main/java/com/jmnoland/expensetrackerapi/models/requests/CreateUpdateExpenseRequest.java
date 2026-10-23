@@ -19,6 +19,8 @@ public class CreateUpdateExpenseRequest {
     @Nullable
     public String recurringExpenseId;
     @Nullable
+    public Boolean confirmed;
+    @Nullable
     public List<CreateUpdateLineItemRequest> lineItems;
     public CreateUpdateExpenseRequest() {}
 }

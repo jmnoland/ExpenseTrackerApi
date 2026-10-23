@@ -17,6 +17,7 @@ public class Expense {
     private String paymentTypeId;
     private Date date;
     private String recurringExpenseId;
+    private Boolean confirmed;
     public Expense(
             String expenseId,
             String clientId,
@@ -25,7 +26,8 @@ public class Expense {
             String name,
             Date date,
             Float amount,
-            String recurringExpenseId) {
+            String recurringExpenseId,
+            Boolean confirmed) {
         this.expenseId = expenseId;
         this.clientId = clientId;
         this.categoryId = categoryId;
@@ -34,6 +36,7 @@ public class Expense {
         this.date = date;
         this.amount = amount;
         this.recurringExpenseId = recurringExpenseId;
+        this.confirmed = confirmed;
     }
 
     public String getName() {
@@ -92,5 +95,14 @@ public class Expense {
 
     public void setRecurringExpenseId(String recurringExpenseId) {
         this.recurringExpenseId = recurringExpenseId;
+    }
+
+    // Expenses stored before this field existed have no value and are treated as confirmed
+    public Boolean getConfirmed() {
+        return confirmed == null || confirmed;
+    }
+
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
     }
 }

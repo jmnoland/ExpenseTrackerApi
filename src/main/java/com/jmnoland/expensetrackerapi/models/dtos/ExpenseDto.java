@@ -14,6 +14,7 @@ public class ExpenseDto {
     public Float amount;
     @Nullable
     public String recurringExpenseId;
+    public boolean confirmed;
 
     public ExpenseDto(
             String expenseId,
@@ -24,7 +25,8 @@ public class ExpenseDto {
             Date date,
             Float amount,
             @Nullable
-            String recurringExpenseId
+            String recurringExpenseId,
+            boolean confirmed
     ) {
         this.expenseId = expenseId;
         this.clientId = clientId;
@@ -34,5 +36,6 @@ public class ExpenseDto {
         this.date = date;
         this.amount = amount;
         this.recurringExpenseId = recurringExpenseId;
+        this.confirmed = confirmed;
     }
 }

@@ -2,6 +2,7 @@ package com.jmnoland.expensetrackerapi.models.responses;
 
 import com.jmnoland.expensetrackerapi.models.dtos.ValidationError;
 import com.jmnoland.expensetrackerapi.models.enums.Frequency;
+import com.jmnoland.expensetrackerapi.models.enums.RecurringExpenseType;
 import com.mongodb.lang.Nullable;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ public class RecurringExpenseActionResponse {
     public Float amount;
     @Nullable
     public Date lastExpenseDate;
+    public RecurringExpenseType type;
 
     public List<ValidationError> validationErrors;
 }

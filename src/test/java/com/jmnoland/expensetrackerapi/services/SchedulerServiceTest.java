@@ -9,6 +9,7 @@ import com.jmnoland.expensetrackerapi.interfaces.services.RecurringExpenseServic
 import com.jmnoland.expensetrackerapi.models.dtos.RecurringExpenseDto;
 import com.jmnoland.expensetrackerapi.models.dtos.ServiceResponse;
 import com.jmnoland.expensetrackerapi.models.enums.Frequency;
+import com.jmnoland.expensetrackerapi.models.enums.RecurringExpenseType;
 import com.jmnoland.expensetrackerapi.models.requests.CreateUpdateExpenseRequest;
 import com.jmnoland.expensetrackerapi.repositories.ReportingDataRepository;
 import org.junit.Before;
@@ -60,7 +61,8 @@ public class SchedulerServiceTest {
                 Calendar.getInstance().getTime(),
                 Frequency.MONTHLY,
                 10F,
-                null);
+                null,
+                RecurringExpenseType.FIXED);
 
         ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
 
@@ -68,6 +70,46 @@ public class SchedulerServiceTest {
         assertNotNull(response.responseObject);
         assertSame(response.responseObject.recurringExpenseId, existing.recurringExpenseId);
         assertTrue(response.validationErrors == null || response.validationErrors.isEmpty());
+    }
+    @Test
+    public void GenerateExpense_ShouldCreateConfirmedExpense_WhenTypeIsFixed() {
+        RecurringExpenseDto existing = new RecurringExpenseDto(UUID.randomUUID().toString(),
+                "client1",
+                "Test",
+                "typeId",
+                "Subscription",
+                Calendar.getInstance().getTime(),
+                Calendar.getInstance().getTime(),
+                Frequency.MONTHLY,
+                10F,
+                null,
+                RecurringExpenseType.FIXED);
+
+        ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
+
+        assertTrue(response.successful);
+        assertNotNull(response.responseObject);
+        assertTrue(response.responseObject.confirmed);
+    }
+    @Test
+    public void GenerateExpense_ShouldCreateUnconfirmedExpense_WhenTypeIsVariable() {
+        RecurringExpenseDto existing = new RecurringExpenseDto(UUID.randomUUID().toString(),
+                "client1",
+                "Test",
+                "typeId",
+                "Electricity",
+                Calendar.getInstance().getTime(),
+                Calendar.getInstance().getTime(),
+                Frequency.MONTHLY,
+                10F,
+                null,
+                RecurringExpenseType.VARIABLE);
+
+        ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
+
+        assertTrue(response.successful);
+        assertNotNull(response.responseObject);
+        assertFalse(response.responseObject.confirmed);
     }
     @Test
     public void GenerateExpense_ShouldCreateMonthlyExpense_WhenLastExpenseAtLeastMonthBefore() {
@@ -84,7 +126,8 @@ public class SchedulerServiceTest {
                 null,
                 Frequency.MONTHLY,
                 10F,
-                lastExpenseDate.getTime());
+                lastExpenseDate.getTime(),
+                RecurringExpenseType.FIXED);
 
         ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
 
@@ -109,7 +152,8 @@ public class SchedulerServiceTest {
                 null,
                 Frequency.MONTHLY,
                 10F,
-                lastExpenseDate.getTime());
+                lastExpenseDate.getTime(),
+                RecurringExpenseType.FIXED);
 
         ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
 
@@ -132,7 +176,8 @@ public class SchedulerServiceTest {
                 null,
                 Frequency.WEEKLY,
                 10F,
-                lastExpenseDate.getTime());
+                lastExpenseDate.getTime(),
+                RecurringExpenseType.FIXED);
 
         ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
 
@@ -156,7 +201,8 @@ public class SchedulerServiceTest {
                 null,
                 Frequency.WEEKLY,
                 10F,
-                lastExpenseDate.getTime());
+                lastExpenseDate.getTime(),
+                RecurringExpenseType.FIXED);
 
         ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
 
@@ -179,7 +225,8 @@ public class SchedulerServiceTest {
                 null,
                 Frequency.DAILY,
                 10F,
-                lastExpenseDate.getTime());
+                lastExpenseDate.getTime(),
+                RecurringExpenseType.FIXED);
 
         ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
 
@@ -204,7 +251,8 @@ public class SchedulerServiceTest {
                 null,
                 Frequency.YEARLY,
                 10F,
-                lastExpenseDate.getTime());
+                lastExpenseDate.getTime(),
+                RecurringExpenseType.FIXED);
 
         ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
 
@@ -229,7 +277,8 @@ public class SchedulerServiceTest {
                 null,
                 Frequency.YEARLY,
                 10F,
-                lastExpenseDate.getTime());
+                lastExpenseDate.getTime(),
+                RecurringExpenseType.FIXED);
 
         ServiceResponse<CreateUpdateExpenseRequest> response = this.classUnderTest.GenerateExpenseForDate(existing, Calendar.getInstance());
 

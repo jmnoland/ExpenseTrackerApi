@@ -22,6 +22,7 @@ public class RecurringExpense {
     private Float amount;
     @Nullable
     private Date lastExpenseDate;
+    private String type;
 
     public RecurringExpense(
             String recurringExpenseId,
@@ -33,7 +34,8 @@ public class RecurringExpense {
             @Nullable Date endDate,
             String frequency,
             Float amount,
-            @Nullable Date lastExpenseDate) {
+            @Nullable Date lastExpenseDate,
+            String type) {
         this.recurringExpenseId = recurringExpenseId;
         this.clientId = clientId;
         this.categoryId = categoryId;
@@ -44,6 +46,7 @@ public class RecurringExpense {
         this.frequency = frequency;
         this.amount = amount;
         this.lastExpenseDate = lastExpenseDate;
+        this.type = type;
     }
 
     public String getRecurringExpenseId() { return this.recurringExpenseId; }
@@ -120,5 +123,13 @@ public class RecurringExpense {
 
     public void setLastExpenseDate(@Nullable Date lastExpenseDate) {
         this.lastExpenseDate = lastExpenseDate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
